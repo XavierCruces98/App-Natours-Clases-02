@@ -1,0 +1,60 @@
+  <!-- nota si o si desde el servidor debes pasarle la variable "user" -->
+  <!-- nota con el "href" cambias la direcion URL sin necesidad de JS -->
+  <!-- nota A todas las imagenes debes de ponerle '/' al principio src="/imagenes" -->
+  <!-- nota si pones src="imagenes" lo tomara como una URL -->
+  <!-- nota recuerda que: src="/imagenes" lo buscara en la carpeta 'public' -->
+  <!-- nota recuerda usar <a></a> para poner href en las imagenes <img> -->
+  
+<header class="cabezera">
+  <nav class="navegador navegador--tours">
+    <form class="navegador--buscador">
+      <button class="navegador--buscador-boton">
+        <svg>
+          <use xlink:href="/imagenes/iconos.svg#icon-search"></use>
+        </svg>
+      </button>
+      <input
+        type="text"
+        placeholder="buscar tours"
+        class="navegador--buscador-input"
+      />
+    </form>
+  </nav>
+  <div class="cabezera-logo">
+    <a href="/home">
+      <img
+        id="home"
+        class="navegador--elemento"
+        src="/imagenes/logo-white.png"
+        alt="aplicacion logo"
+      />
+    </a>
+  </div>
+
+  <nav class="navegador navegador--usuarios">
+    <!-- nota si o si desde el servidor debes pasarle la variable "user" -->
+    <!-- nota con el "href" cambias la direcion URL sin necesidad de JS -->
+    <% if (usuario) { %>
+    <a id="btn-logout" class="navegador--elemento" href="/home">Log out</a>
+    <a class="navegador--elemento" href="/me">
+      <img
+        class="navegador--usuario-imagen"
+        src="/imagenes/usuarios/<%= usuario.photo %>"
+        alt="foto de <%= usuario.nombre %>"
+      />
+      <span><%= usuario.nombre %>s</span>
+    </a>
+    <% }; %> <% if (!usuario) { %>
+    <a id="btn-login" class="navegador--elemento" href="/login">Login</a>
+    <a
+      id="btn-signup"
+      class="navegador--elemento navegador--elemento-cuenta"
+      href="/signup"
+      >Sign up</a
+    >
+    <% }; %>
+  </nav>
+
+  <!-- <button class="nav__el">Log in</button>
+    <button class="nav__el nav__el--cta">Sign up</button> -->
+</header>

@@ -13,12 +13,27 @@ const DIRNAME = require('../DIRNAME');
 const userRoute = require('../3routes/routerUser');
 const tourRoute = require('../3routes/routerTour');
 const reviewRoute = require('../3routes/routerReview');
-const ErroClass = require('../utilidades/ErrorClass');
+const ErrorClass = require('../utilidades/ErrorClass');
 const ErrorController = require('../2controlador/controllerError'); // globalErrorHandler
 const testRoute = express.Router();
 
 const DB_tour = require('../1modelos/esquemaTour');
 const DB_user = require('../1modelos/esquemaUser');
+
+const jwt = require('jsonwebtoken'); // si es un NPM
+function validarJWT(cookies, next) {
+  let textoJwt = cookies.slice(
+    cookies.indexOf('miJwtCookie') + 'miJwtCookie'.length + 1
+  );
+  if (!textoJwt)
+    return next(new ErrorClass('1.0 No has iniciado sesion! ', 401));
+
+  const indiceFinal =
+    textoJwt.indexOf(' ') < 0 ? textoJwt.length : textoJwt.indexOf(' ');
+  textoJwt = textoJwt.slice(0, indiceFinal);
+
+  return jwt.verify(textoJwt, process.env.JWT_SECRETO);
+}
 
 function rutaInicialGet(req, resp) {
   resp
@@ -74,13 +89,13 @@ apiWithExpress.get('/login', (req, resp) => {
 });
 
 // render(me.ejs)
-apiWithExpress.get('/me', async (req, resp) => {
+apiWithExpress.get('/me', async (req, resp, next) => {
   //const usuario = await DB_user.findOne({ nombre: 'user Admin' });
+  const jwt = validarJWT(req.headers.cookie, next);
+  console.log(jwt);
 
-  const usuario = await DB_user.findOne({ nombre: 'Xavier Alexander' });
-  usuario.photo = 'user-2.jpg';
-
-  console.log({ usuario: usuario });
+  const usuario = await DB_user.findOne({ _id: jwt.id });
+  usuario.photo = usuario.photo || 'user-2.jpg';
   resp.status(200).render('me', {
     usuario: usuario,
   });
@@ -192,7 +207,7 @@ apiWithExpress.all('*', (req, resp, next) => {
   // next() al momento de pasarle un error, reconoce automaticamente que se trata de un error
   // se lo pasara al "middleware-error-general"
   next(
-    new ErroClass(`No se puede encontrar la ruta : ${req.originalUrl}`, 404)
+    new ErrorClass(`No se puede encontrar la ruta : ${req.originalUrl}`, 404)
   );
 });
 

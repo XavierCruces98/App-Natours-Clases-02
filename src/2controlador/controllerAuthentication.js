@@ -167,7 +167,6 @@ exports.permisoJWT = AsyncFunction(async function (req, resp, next) {
   }
 
 
-
   if (!token || token === 'null')
     return next(new ErrorClass('1.0 No has iniciado sesion! ', 401));
 

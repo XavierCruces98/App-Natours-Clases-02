@@ -54,6 +54,8 @@ permiso: read and write and delete
 ver tus repositorios remotos:
  🟢 git remote -v
  🟢 git remote add [nombre] [url-github] // anadir un repositorio remoto
+ 🟢 git clone  [url-github] // clona un proyecto de github (con sus commits y todo)
+ 🔴 borrar la carpeta escondida /.git // con esto puedes dar "git init" de nuevo, 
 
 guardar tu progreso:
   🟢 git add . // para mi es lo más seguro
@@ -74,7 +76,9 @@ Eliminar commit:
   🟢 git reset --soft HEAD~1        // borrar el ultimo commit pero tus cambios se mantienen
   🔴 git reset --hard HEAD~1         // borrar el ultimo commit pero tus cambios NOO se mantienen
   🟢 git commit --amend -m "nuevo titulo"  //cambiar el nombre del commit sin haber hecho push
+  🟢 git push --set-upstream origin main  // setear el push en ORIGN MAIN
   🟢 git push -f origin main // actualizar estos cambios en GITHUB
+
 
   💻 https://midu.dev/como-deshacer-el-ultimo-commit-git/ 
   💻 https://www.campusmvp.es/recursos/post/como-eliminar-el-ultimo-commit-de-git-en-el-repositorio-de-origen-p-ej-github.aspx
