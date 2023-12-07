@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./../css/estilos.css" />
+    <title>Document</title>
+    <script type="module" defer src="./../js/home.js"></script>
+  </head>
+  <body>
+    <!------------------1.0 CABEZERA ------------->
+    <header class="cabezera">
+      <nav class="navegador navegador--tours">
+        <a href="#" class="navegador--elemento">Todos los Tours</a>
+        <form  class="navegador--buscador">
+          <button class="navegador--buscador-boton">
+            <svg>
+              <use xlink:href="imagenes/iconos.svg#icon-search"></use>
+            </svg>
+          </button>
+          <input
+            type="text"
+            placeholder="buscar tours"
+            class="navegador--buscador-input"
+          />
+        </form>
+      </nav>
+      <div class="cabezera-logo">
+        <img src="imagenes/logo-white.png" alt="aplicacion logo" />
+      </div>
+      <nav class="navegador navegador--usuarios">
+        <a href="#" class="navegador--elemento">Mis Libros</a>
+        <a href="#" class="navegador--elemento">
+          <img
+            src="imagenes/user.jpg"
+            alt="usuario foto"
+            class="navegador--usuario-imagen"
+          />
+          <span>Jonas</span>
+        </a>
+      </nav>
+      <!-- <button class="nav__el">Log in</button>
+        <button class="nav__el nav__el--cta">Sign up</button> -->
+    </header>
+    <!------------------3.0 MAING ------------->
+    <main class="main">
+      
+    </main>
+    <!------------------3.0 FOOTER ------------->
+    <footer class="footer">
+      <div class="footer--logo">
+        <img src="imagenes/logo-green.png" alt="Mi Aplicacion Logo" />
+      </div>
+      <ul class="footer--navegador">
+        <li><a href="#">Sobre Nosotros</a></li>
+        <li><a href="#">Descargar Apps</a></li>
+        <li><a href="#">Bienvenido Guia</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Conctato</a></li>
+      </ul>
+      <p class="footer--copyright">&copy; por Xavier Huaman</p>
+    </footer>
+  </body>
+</html>

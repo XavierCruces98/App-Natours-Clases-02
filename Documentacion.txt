@@ -1,0 +1,87 @@
+
+Instalar:
+
+🔴 (necesario) npm install express
+🔴 (necesario) npm i mongoose
+🔴 (necesario) npm install nodemon (para q el servidor siga funcionando con cambios)
+🔴 (necesario) npm install morgan (para q aparezca un mensaje cada que damos un request MetodoHTTP en postman)
+🔴 (necesario) npm install dotenv (para las variales de entorno)
+🔴 (necesario) 
+  "start:prod": "set NODE_ENV=production&&npx nodemon \"src/proyect1/server/2. App-run.js\"",
+  "start:dev": "set NODE_ENV=development&&npx nodemon \"src/proyect1/server/2. App-run.js\""s
+
+🔴 (necesario) npm install slugify -E         (SLUGIFY concatener nombres-con-guion)
+🔴 (necesario) npm install ndb  --save-dev -E (debuggin google)
+🔴 (necesario) npm install bcrypts -E         (encriptar contraseña)
+🔴 (necesario) npm install jsonwebtoken -E    (proceso de Authenticacion con JWT)
+🔴 (necesario) npm install nodemailer -E      (enviar EMAIL)
+🔴 (necesario) npm install express-rate-limit -E   (limitar las solicitudes desde una misma IP)
+🔴 (necesario) npm install helmet -E          (configurar los HEADERS en el middleware de "app-express.js")
+🔴 (necesario) npm install express-mongo-sanitize -E (impide que ingresen consultas NoSQL en cualquier body.postman)
+🔴 (necesario) npm install xss-clean -E       (impide que ingresen codigo <html> en el body.postman)
+🔴 (necesario) npm install hpp  -E            (impide la polucion en la url ---tours?sort=duracion&sort=precio---)
+🔴 (necesario) npm install pug --save-dev  -E             (para renderizar plantilla de PUG)
+🔴 (necesario) npm install ejs --save-dev  -E             (para renderizar plantilla de EJS)
+
+🟢 opcional: npm start ("node reiniciarArchivos.js") reinicia archivos
+
+
+🟠 (herramientas) descarga postman https://www.postman.com/downloads/?utm_source=postman-home
+🟠 (herramientas) instalar la extension DotENV (vs code)
+
+
+nota
+☝ http://127.0.0.1:3000/public/html/index.html  ❌❌ ESTO ESTA MAL, omite el "public"
+☝ http://127.0.0.1:3000/html/index.html         ✅✅  esto esta bien, omitiendo el "public"
+☝ http://127.0.0.1:3000/html/otro.html          ✅✅  esto esta bien, omitiendo el "public"
+
+nota ATLAS
+☝ Usuario: xavierProd solo tiene permiso de readAnyDataBase      (no puede write/update, no puede write delete)
+☝ Usuario: xavierJuni solo tiene permiso de readWriteAnyDatabase (si puede write/update, no puede delete)
+☝ Usuario: xavierDev  solo tiene permiso de Atlas admin          (si puede write/update, si puede delete)
+
+☝ Usuario: xavier     solo tiene permiso de Atlas admin         (si puede write/update, si puede delete)
+  
+
+usuario_atlas: xavierJuni
+password_atlas: ZPN4sVLRLupjJ0jl
+permiso: read and write
+
+usuario_atlas: xavier
+password_atlas: Tu40Txl4lT7inbXy
+permiso: read and write and delete
+
+ver tus repositorios remotos:
+ 🟢 git remote -v
+ 🟢 git remote add [nombre] [url-github] // anadir un repositorio remoto
+
+guardar tu progreso:
+  🟢 git add . // para mi es lo más seguro
+
+Cambiar de commit:
+  🟢 nota shift+q (salir de terminal git)
+  🟢 git log --oneline
+  🟢 git checkout #idcommit
+  🟢 git checkout nombre-rama // git checkout main // ir al ultimo commit de esa rama
+  
+stash: guarda cambios sin commit, pero una vez guardado reinicia todo
+  🟢 git stash        // deshacer los cambios que no tienen commit, osea borra tu trabajo que no tenga commit
+  🟢 git stash apply  // guardar sin commit
+  🟢 git stash list   // ver los cambios
+  🟢 git stash clear // limpiar los cambios
+
+Eliminar commit:
+  🟢 git reset --soft HEAD~1        // borrar el ultimo commit pero tus cambios se mantienen
+  🔴 git reset --hard HEAD~1         // borrar el ultimo commit pero tus cambios NOO se mantienen
+  🟢 git commit --amend -m "nuevo titulo"  //cambiar el nombre del commit sin haber hecho push
+  🟢 git push -f origin main // actualizar estos cambios en GITHUB
+
+  💻 https://midu.dev/como-deshacer-el-ultimo-commit-git/ 
+  💻 https://www.campusmvp.es/recursos/post/como-eliminar-el-ultimo-commit-de-git-en-el-repositorio-de-origen-p-ej-github.aspx
+
+  // La realidad es que borrar un commit no se deberia hacer
+  https://kinsta.com/es/base-de-conocimiento/gitignore-no-funciona/
+
+  🟢 git rm --cached configDesarrollo.env  // ignorar el seguimiento de un archivo, cuando has subido un archivo a github y luego lo quieres ignorar 
+  🟢 git rm --cached "src/utilidades/sendEmailTest.js" // recuerda poner el archivo en .gitignore
+ 

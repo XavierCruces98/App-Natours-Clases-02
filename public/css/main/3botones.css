@@ -1,0 +1,108 @@
+.boton, .boton:link, .boton:visited{
+  padding: 1.4rem;
+  border-radius: 10rem;
+
+  display: inline-block;
+  text-decoration: none;
+  position: relative;
+
+  transition: all 0.4s;
+  font-weight: 400;
+ 
+  backface-visibility: hidden;
+  /*Add later when we use this for the button in form*/
+  border: none;
+  cursor: pointer;
+}
+
+.boton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.boton:active {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.boton:focus {
+  outline: none;
+  background-color: #2e864b;
+}
+
+.boton--blanco {
+  background-color: #fff;
+  color: #777;
+}
+.boton--blanco::after {
+  background-color: #fff;
+}
+
+.boton--verde {
+  background-color: #55c57a;
+  color: #fff;
+}
+.boton--verde::after {
+  background-color: #55c57a;
+}
+
+.boton--pequeno {
+  padding: 1.25rem 3rem !important;
+  font-size: 1.4rem !important;
+}
+
+
+.boton--pequeno,
+.boton--pequeno:link,
+.boton--pequeno:visited {
+  background-color: #55c57a;
+  color: #fff;
+  font-size: 1.4rem;
+  padding: 1.25rem;
+  
+  border-radius: 10rem;
+
+  position: relative;
+
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 400;
+  border: none;
+}
+
+.boton--pequeno:hover {
+  background-color: #7dd56f;
+}
+
+.boton-texto:link,
+.boton-texto:visited {
+  color: #55c57a;
+  display: inline-block;
+  text-decoration: none;
+
+  border-bottom: 1px solid #55c57a;
+  
+  padding: 3px;
+  transition: all 0.2s;
+}
+
+.boton-texto:hover {
+  background-color: #55c57a;
+  color: #fff;
+
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.boton-texto:active {
+
+  transform: translateY(0);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.boton-texto:focus {
+  outline: none;
+  outline: 3px solid #55c57a;
+  outline-offset: 3px;
+}

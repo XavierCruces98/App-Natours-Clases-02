@@ -1,0 +1,40 @@
+[
+  {
+    "nombre": "test post tour1",
+    "rating": 1,
+    "fechaPostman": "2023-09-11T05:00:00.000Z",
+    "message": "este es un documment creado desde Postman",
+    "soltero": false,
+    "fecha": "2023-09-11T16:06:23.282Z",
+    "__v": 0,
+    "fechaModelTour": "2023-10-04T21:58:50.763Z"
+  },
+  {
+    "nombre": "test post tour2",
+    "rating": 2,
+    "fechaPostman": "2000-01-20T05:00:00.000Z",
+    "message": "este es un documment creado desde Postman",
+    "soltero": false,
+    "fecha": "2023-09-11T16:10:07.732Z",
+    "__v": 0,
+    "fechaModelTour": "2023-10-04T21:58:50.764Z"
+  },
+  {
+    "nombre": "test post tour3",
+    "rating": 3,
+    "fechaPostman": "2000-01-20T05:00:00.000Z",
+    "message": "este es un documment creado desde Postman",
+    "soltero": false,
+    "fechaModelTour": "2023-09-11T16:10:40.458Z",
+    "__v": 0
+  },
+  {
+    "nombre": "test post tour4",
+    "rating": 4.5,
+    "fechaPostman": "2000-01-20T05:00:00.000Z",
+    "message": "este es un documment creado desde Postman",
+    "soltero": false,
+    "fechaModelTour": "2023-10-04T21:24:50.640Z",
+    "__v": 0
+  }
+]

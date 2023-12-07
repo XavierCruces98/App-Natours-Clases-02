@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./../css/estilos.css" />
+    <link rel="shortcut icon" type="image/png" href="/imagenes/favicon.png" />
+    <script type="module" defer src="./../js/home.js"></script>
+
+    <title>Document</title>
+  </head>
+  <body>
+    <!------------------1.0 CABEZERA ------------->
+    <header class="cabezera">
+      <nav class="navegador navegador--tours">
+        <form class="navegador--buscador">
+          <button class="navegador--buscador-boton">
+            <svg>
+              <use xlink:href="/imagenes/iconos.svg#icon-search"></use>
+            </svg>
+          </button>
+          <input
+            type="text"
+            placeholder="buscar tours"
+            class="navegador--buscador-input"
+          />
+        </form>
+      </nav>
+      <div class="cabezera-logo">
+        <a href="/home">
+          <img
+            id="home"
+            class="navegador--elemento"
+            src="/imagenes/logo-white.png"
+            alt="aplicacion logo"
+          />
+        </a>
+      </div>
+
+      <nav class="navegador navegador--usuarios">
+        <!-- nota si o si desde el servidor debes pasarle la variable "user" -->
+        <!-- nota con el "href" cambias la direcion URL sin necesidad de JS -->
+        <% if (usuario) { %>
+        <a id="btn-logout" class="navegador--elemento" href="/home">Log out</a>
+        <a class="navegador--elemento" href="/me">
+          <img
+            class="navegador--usuario-imagen"
+            src="/imagenes/usuarios/<%= usuario.photo %>"
+            alt="foto de <%= usuario.nombre %>"
+          />
+          <span><%= usuario.nombre %>s</span>
+        </a>
+        <% }; %> <% if (!usuario) { %>
+        <a id="btn-login" class="navegador--elemento" href="/login">Login</a>
+        <a
+          id="btn-signup"
+          class="navegador--elemento navegador--elemento-cuenta"
+          href="/signup"
+          >Sign up</a
+        >
+        <% }; %>
+      </nav>
+
+      <!-- <button class="nav__el">Log in</button>
+        <button class="nav__el nav__el--cta">Sign up</button> -->
+    </header>
+
+    <!------------------3.0 MAING ------------->
+    <main class="main">
+      <div class="formulario-signup">
+        <h2 class="titulo-secundario quick-facts">Crea tu Cuenta</h2>
+        <form class="" action="">
+          <div class="formulario--grupo">
+            <label class="formulario--label" for="nombre">Nombre</label>
+            <input
+              class="formulario--input"
+              id="signup-nombre"
+              placeholder="Ingresa tu nombre"
+              type="text"
+              required
+            />
+          </div>
+
+          <div class="formulario--grupo">
+            <label class="formulario--label" for="email">Email</label>
+            <input
+              class="formulario--input"
+              id="signup-email"
+              placeholder="miemail@ejemplo.com"
+              type="text"
+              required
+            />
+          </div>
+
+          <div class="formulario--grupo">
+            <label class="formulario--label" for="password">Password</label>
+            <input
+              class="formulario--input"
+              id="signup-password"
+              placeholder="Ingresa tu contraseña"
+              type="password"
+              required
+            />
+          </div>
+
+          <div class="formulario--grupo">
+            <label class="formulario--label" for="password-confirm">
+              Confirmar Password
+            </label>
+            <input
+              class="formulario--input"
+              id="signup-password-confirm"
+              placeholder="Confirma tu contraseña"
+              type="password"
+              required
+            />
+          </div>
+          <button type="submit" class="boton boton--verde">Sign Up</button>
+        </form>
+      </div>
+    </main>
+    <!------------------3.0 FOOTER ------------->
+    <footer class="footer">
+      <div class="footer--logo">
+        <img src="/imagenes/logo-green.png" alt="Mi Aplicacion Logo" />
+      </div>
+      <ul class="footer--navegador">
+        <li><a href="#">Sobre Nosotros</a></li>
+        <li><a href="#">Descargar Apps</a></li>
+        <li><a href="#">Bienvenido Guia</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Conctato</a></li>
+      </ul>
+      <p class="footer--copyright">&copy; por Xavier Huaman</p>
+    </footer>
+  </body>
+</html>

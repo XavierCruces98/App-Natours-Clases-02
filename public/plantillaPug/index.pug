@@ -1,0 +1,50 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="css/estilos.css")
+    title Document
+    script(type="module", defer, src="js/home.js")
+     //- nota:  basta con hacer "js/archivo.js" porque ya se sobre entiende que estamos dentro de PUBLIC
+  body
+    //- 1.0 CABEZERA
+    header.cabezera
+      nav.navegador.navegador--tours
+        a.navegador--elemento(href="#") Todos los Tours
+        form.navegador--buscador
+          button.navegador--buscador-boton
+            svg
+              use(xlink:href="imagenes/iconos.svg#icon-search")
+          input(type="text", placeholder="buscar tours", class="navegador--buscador-input")
+      div.cabezera-logo
+        img(src="imagenes/logo-white.png", alt="aplicacion logo")
+      nav.navegador.navegador--usuarios
+        a.navegador--elemento(href="#") Mis Libros
+        a.navegador--elemento(href="#")
+          img(src="imagenes/user.jpg", alt="usuario foto", class="navegador--usuario-imagen")
+          span Jonas
+    //- 3.0 MAING
+    main.main
+      div.formulario
+        h2.titulo-secundario.quick-facts Log into your account
+        form.formulario.formulario--login
+          div.formulario--grupo
+            label.formulario--label(for="email") Email address
+            input#email.formulario--input(type="email", placeholder="you@example.com", required)
+          div.formulario--grupo.quick-facts
+            label.formulario--label(for="password") Password
+            input#password.formulario--input(type="password", placeholder="••••••••", required, minlength="5")
+          div.formulario--grupo
+            button.boton.boton--verde Login
+    //- 3.0 FOOTER
+    footer.footer
+      div.footer--logo
+        img(src="imagenes/logo-green.png", alt="Mi Aplicacion Logo")
+      ul.footer--navegador
+        li: a(href="#") Sobre Nosotros
+        li: a(href="#") Descargar Apps
+        li: a(href="#") Bienvenido Guia
+        li: a(href="#") Carreras
+        li: a(href="#") Conctato
+      p.footer--copyright &copy; por Xavier Huaman

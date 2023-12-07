@@ -1,0 +1,77 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="css/estilos.css")
+    title Document
+    script(type="module", defer, src="js/home.js")
+  body
+
+    //- 1.0 HEADER
+    header.cabezera
+      nav.navegador.navegador--tours
+        a.navegador--elemento(href="#") Todos los Tours
+        form
+          button
+            svg
+              use(xlink:href="imagenes/iconos.svg#icon-search")
+          input(type="text", placeholder="buscar tours", class="navegador--buscador-input")
+      div.cabezera-logo
+        img(src="imagenes/logo-white.png", alt="aplicacion logo")
+      nav.navegador.navegador--usuarios
+        a.navegador--elemento(href="#") Mis Libros
+        a.navegador--elemento(href="#")
+          img(src="imagenes/user.jpg", alt="usuario foto", class="navegador--usuario-imagen")
+          span Jonas
+    //- 2.0 MAIN
+    main.main
+      div.tarjeta-contenedor
+        div.tarjeta
+          div.tarjeta--cabezera
+            div.tarjeta--figura
+              div.tarjeta--figura-overlay &nbsp;
+              img(src="imagenes/tour-1-cover.jgp", alt="tour 1", class="tarjeta--imagen")
+            h3.titulo-terciario
+              span The Forest Tour
+          div.tarjeta--detalles
+            h4.tarjeta--sub-cabezera Facil 5 dias
+            p.tarjeta--texto Caminata de punto A -> Punto B
+            div.tarjeta--datos
+              svg.tarjeta--icono
+                use(xlink:href="imagenes/iconos.svg#icon-map-pin")
+              span Canada
+            div.tarjeta--datos
+              svg.tarjeta--icono
+                use(xlink:href="imagenes/iconos.svg#icon-calendar")
+              span ABRIL 2021
+            div.tarjeta--datos
+              svg.tarjeta--icono
+                use(xlink:href="imagenes/iconos.svg#icon-flag")
+              span 3 STOPS
+            div.tarjeta--datos
+              svg.tarjeta--icono
+                use(xlink:href="imagenes/iconos.svg#icon-user")
+              span 25 personas
+          div.tarjeta--footer
+            p
+              span.tarjeta--footer-valor $300
+              span.tarjeta--footer-texto por persona
+            p.tarjeta--ratings
+              span.tarjeta--footer-valor 4.5
+              span.tarjeta--footer-texto Rating (20)
+              a(href="#" class="boton boton--verde boton--pequeno")
+        div.tarjeta
+    //- 3.0 FOOTER
+    footer.footer
+      div.footer--logo
+        img(src="imagenes/logo-green.png", alt="Mi Aplicacion Logo")
+      ul.footer--navegador
+        li: a(href="#") Sobre Nosotros
+        li: a(href="#") Descargar Apps
+        li: a(href="#") Bienvenido Guia
+        li: a(href="#") Carreras
+        li: a(href="#") Conctato
+      p.footer--copyright &copy; por Xavier Huaman
+   
+  

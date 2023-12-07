@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./../css/estilos.css" />
+    <title>Document</title>
+    <script type="module" defer src="./../js/home.js"></script>
+  </head>
+  <body>
+    <!-------------------- 💻 1.0 HEADER -------------->
+    <header class="cabezera">
+      <nav class="navegador navegador--tours">
+        <a href="#" class="navegador--elemento">Todos los Tours</a>
+        <form  class="navegador--buscador">
+          <button class="navegador--buscador-boton">
+            <svg>
+              <use xlink:href="imagenes/iconos.svg#icon-search"></use>
+            </svg>
+          </button>
+          <input
+            type="text"
+            placeholder="buscar tours"
+            class="navegador--buscador-input"
+          />
+        </form>
+      </nav>
+      <div class="cabezera-logo">
+        <img src="imagenes/logo-white.png" alt="aplicacion logo" />
+      </div>
+      <nav class="navegador navegador--usuarios">
+        <a href="#" class="navegador--elemento">Mis Libros</a>
+        <a href="#" class="navegador--elemento">
+          <img
+            src="imagenes/user.jpg"
+            alt="usuario foto"
+            class="navegador--usuario-imagen"
+          />
+          <span>Jonas</span>
+        </a>
+      </nav>
+      <!-- <button class="nav__el">Log in</button>
+        <button class="nav__el nav__el--cta">Sign up</button> -->
+    </header>
+    <!-------------------- 💻 2.0 SECCION HEADER -------------->
+    <section class="seccion-titulo">
+      <div class="titulo-box">
+        <h1 class="titulo-primario">
+          <span>The Park <br />Camper Tour</span>
+        </h1>
+        <div class="titulo-box--grupo">
+          <div class="titulo-box--detalles">
+            <svg class="titulo-box--icono">
+              <use xlink:href="imagenes/iconos.svg#icon-clock"></use>
+            </svg>
+            <span class="titulo-box--texto">10 dias</span>
+          </div>
+
+          <div class="titulo-box--detalles">
+            <svg class="titulo-box--icono">
+              <use xlink:href="imagenes/iconos.svg#icon-map-pin"></use>
+            </svg>
+            <span class="titulo-box--texto">Las Vegas Usa</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-------------------- 💻 3.0 SECCION DESCRIPCION -------------->
+    <section class="seccion-descripcion">
+      <div class="resumen-box">
+        <div>
+          <div class="resumen-box--grupo">
+            <h2 class="titulo-secundario quick-facts">Quick Facts</h2>
+
+            <div class="resumen-box--detalles">
+              <svg class="resumen-box--icono">
+                <use xlink:href="imagenes/iconos#icon-calendar"></use>
+              </svg>
+              <span class="resumen-box--label">Next Fecha</span>
+              <span class="resumen-box--texto">Agosto 2021</span>
+            </div>
+
+            <div class="resumen-box--detalles">
+              <svg class="resumen-box--icono">
+                <use xlink:href="imagenes/iconos#icon-treding-up"></use>
+              </svg>
+              <span class="resumen-box--label">Dificultad</span>
+              <span class="resumen-box--texto">Medio</span>
+            </div>
+
+            <div class="resumen-box--detalles">
+              <svg class="resumen-box--icono">
+                <use xlink:href="imagenes/iconos#icon-user"></use>
+              </svg>
+              <span class="resumen-box--label">Participantes</span>
+              <span class="resumen-box--texto">10 personas</span>
+            </div>
+
+            <div class="resumen-box--detalles">
+              <svg class="resumen-box--icono">
+                <use xlink:href="imagenes/iconos#icon-start"></use>
+              </svg>
+              <span class="resumen-box--label">Rating</span>
+              <span class="resumen-box--texto">4.9/5</span>
+            </div>
+          </div>
+
+          <div class="resumen-box--grupo">
+            <h2 class="titulo-secundario quick-facts">Tus Guias</h2>
+
+            <div class="resumen-box--detalles">
+              <img
+                src="imagenes/usuarios/user-19.jpg"
+                alt="Lider Guia"
+                class="resumen-box--imagen"
+              />
+              <span class="resumen-box--label">Lider Guia</span>
+              <span class="resumen-box--texto">Steven Millar</span>
+            </div>
+
+            <div class="resumen-box--detalles">
+              <img
+                src="imagenes/usuarios/user-18.jpg"
+                alt="Lider Guia"
+                class="resumen-box--imagen"
+              />
+              <span class="resumen-box--label">Lider Guia</span>
+              <span class="resumen-box--texto">Lisa Brown</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="descripcion-box">
+        <h2 class="titulo-secundario quick-facts">Sobre --The Park---</h2>
+        <p class="descripcion--texto">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, iusto
+          cupiditate. Harum iusto veritatis mollitia distinctio aut atque eaque
+          ipsa, tempore quia neque debitis impedit doloremque labore officiis
+          hic maiores?
+        </p>
+        <p class="descripcion--texto">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, iusto
+          cupiditate. Harum iusto veritatis mollitia distinctio aut atque eaque
+          ipsa, tempore quia neque debitis impedit doloremque labore officiis
+          hic maiores?
+        </p>
+      </div>
+    </section>
+
+    <!-------------------- 💻 4.0 SECCION IMAGENES -------------->
+    <section class="seccion-imagenes">
+      <div class="imagen-box">
+        <img
+          class="imagen-box--img imagen-box--img-1"
+          src="imagenes/tour-5-1.jpg"
+          alt="The Park Camper"
+        />
+      </div>
+      <div class="imagen-box">
+        <img
+          class="imagen-box--img imagen-box--img-2"
+          src="imagenes/tour-5-2.jpg"
+          alt="The Park Camper"
+        />
+      </div>
+      <div class="imagen-box">
+        <img
+          class="imagen-box--img imagen-box--img-3"
+          src="imagenes/tour-5-3.jpg"
+          alt="The Park Camper"
+        />
+      </div>
+    </section>
+
+    <!-------------------- 💻 5.0 SECCION MAPA -------------->
+    <section>
+      <div id="mapa"></div>
+      <!-- CODIGO JAVACRIPTS -->
+    </section>
+
+    <!--------------------💻 6.0  SECCION REVIEWS -------------->
+    <section class="seccion-reviews">
+      <div class="reviews">
+        <div class="reviews--tarjeta">
+          <div class="reviews--avatar">
+            <img
+              src="imagenes/usuarios/user-7.jgp"
+              alt="jim balton"
+              class="reviews--avatar-img"
+            />
+            <h6 class="reviews--usuario">Jim Balton</h6>
+          </div>
+
+          <p class="reviews--texto">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut sit
+            tenetur repellat eum modi, at, consequatur tempora quo molestias
+            quibusdam nam similique commodi animi totam. Est autem reiciendis
+            quae suscipit!
+          </p>
+
+          <div class="reviews--rating">
+            <svg class="reviews--estrella reviews--estrella-activo">
+              <use xlink:href="imagenes/icons.svg#icon-start"></use>
+            </svg>
+            <svg class="reviews--estrella reviews--estrella-activo">
+              <use xlink:href="imagenes/icons.svg#icon-start"></use>
+            </svg>
+          </div>
+        </div>
+        <div class="reviews--tarjeta"></div>
+      </div>
+    </section>
+
+    <!-------------------- 💻 7.0 SECCION CUENTA -------------->
+    <section class="seccion-cuenta">
+      <div class="cuenta">
+        <div class="cuenta--img cuenta--img-logo">
+          <img src="imagenes/logo-white.png" alt="Natours Logo" class="" />
+        </div>
+        <img
+          src="imagenes/tour-5-1.jgp"
+          alt=""
+          class="cuenta--img cuenta--img-1"
+        />
+        <img
+          src="imagenes/tour-5-2.jgp"
+          alt=""
+          class="cuenta--img cuenta--img-2"
+        />
+
+        <div class="cuenta--contenido">
+          <h2 class="titulo-secundario">Que estas esperando?</h2>
+          <p class="cuenta--texto">10 dias, 1 aventura, infinito memorias</p>
+          <button class="boton boton--verde span--all--rows">
+            reserva ahora!
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-------------------- 💻 8.0 FOOTER -------------->
+    <footer class="footer">
+      <div class="footer--logo">
+        <img src="imagenes/logo-green.png" alt="Mi Aplicacion Logo" />
+      </div>
+      <ul class="footer--navegador">
+        <li><a href="#">Sobre Nosotros</a></li>
+        <li><a href="#">Descargar Apps</a></li>
+        <li><a href="#">Bienvenido Guia</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Conctato</a></li>
+      </ul>
+      <p class="footer--copyright">&copy; por Xavier Huaman</p>
+    </footer>
+  </body>
+</html>

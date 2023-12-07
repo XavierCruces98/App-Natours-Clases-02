@@ -1,0 +1,26 @@
+
+.seccion-descripcion {
+  background-color: #fcfcfc;
+  margin-top: calc(0px - var(--section-rotate));
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.seccion-descripcion > * {
+  padding: 0 8vw;
+  padding-top: 14vw;
+  padding-bottom: calc(1vw + var(--section-rotate));
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+}
+
+.descripcion-box .descripcion {
+  margin-right: 5rem;
+}
+.descripcion-box .descripcion--texto {
+  font-size: 1.7rem;
+}
+.descripcion-box .descripcion--texto:not(:last-child) {
+  margin-bottom: 2rem;
+}

@@ -1,0 +1,29 @@
+.cabezera {
+  background-color: #444;
+  padding: 0 5rem;
+  height: 8rem;
+  position: relative;
+  z-index: 100;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cabezera-logo img {
+  height: 3.5rem;
+}
+
+
+@media only screen and (max-width: 62.5em) {
+  .cabezera {
+    flex-direction: column;
+  }
+}
+@media only screen and (max-width: 62.5em) {
+  .cabezera-logo {
+    -webkit-box-ordinal-group: 0;
+    order: -1;
+    margin-bottom: 1.5rem;
+  }
+}

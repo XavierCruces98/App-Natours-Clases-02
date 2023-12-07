@@ -1,0 +1,16 @@
+@import './main/1body.css';
+@import './main/2header.css';
+@import './main/3botones.css';
+@import './main/4errores.css';
+
+@import './secciones/1titulo.css';
+@import './secciones/2descripcion.css';
+@import './secciones/3resumen.css';
+@import './secciones/4imagenMapaCuenta.css';
+@import './secciones/5reviews.css';
+
+@import './componentes/1navegacion.css';
+@import './componentes/2formulario.css';
+@import './componentes/3tarjeta.css';
+@import './componentes/4footer.css';
+@import './componentes/5user-view.css';
