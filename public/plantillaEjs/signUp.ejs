@@ -1,5 +1,5 @@
-  <!DOCTYPE html>
-  <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <%- include ("./_head",{titulo: "App | Signup"}); %>
   <body>
     <!------------------1.0 CABEZERA ------------->
@@ -9,14 +9,16 @@
     <main class="main">
       <div class="formulario-signup">
         <h2 class="titulo-secundario quick-facts">Crea tu Cuenta</h2>
-        <form class="" action="">
+        <form id="formulario-signup" class="" action="">
           <div class="formulario--grupo">
             <label class="formulario--label" for="nombre">Nombre</label>
             <input
               class="formulario--input"
-              id="signup-nombre"
+              id="nombre"
               placeholder="Ingresa tu nombre"
               type="text"
+              minlength="1"
+              maxlength="40"
               required
             />
           </div>
@@ -25,7 +27,7 @@
             <label class="formulario--label" for="email">Email</label>
             <input
               class="formulario--input"
-              id="signup-email"
+              id="email"
               placeholder="miemail@ejemplo.com"
               type="text"
               required
@@ -36,9 +38,10 @@
             <label class="formulario--label" for="password">Password</label>
             <input
               class="formulario--input"
-              id="signup-password"
+              id="password"
               placeholder="Ingresa tu contraseña"
               type="password"
+              minlength="8"
               required
             />
           </div>
@@ -49,13 +52,16 @@
             </label>
             <input
               class="formulario--input"
-              id="signup-password-confirm"
+              id="password-confirm"
               placeholder="Confirma tu contraseña"
               type="password"
+              minlength="8"
               required
             />
           </div>
-          <input type="submit" class="boton boton--verde">Sign Up</input >
+          <div class="formulario--grupo">
+            <button type="submit" class="boton boton--verde">Sign Up</button>
+          </div>
         </form>
       </div>
     </main>

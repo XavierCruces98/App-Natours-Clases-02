@@ -1,12 +1,11 @@
 // node "src/proyect1/controlador/controlUsers.js"
 // npm run start:dev
-const cloneDeep = require('lodash.clonedeep');
 const DB_user = require('../1modelos/esquemaUser');
 
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 
-const respuestaWithJWT = require('../utlidadesPropias/respuestaWithJWT');
+const { respuestaWithJWT } = require('../utlidadesPropias/respuestaWithJWT');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 const handlerFactory = require('./handlerFactory');
 

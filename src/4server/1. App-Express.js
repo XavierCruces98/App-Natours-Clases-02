@@ -13,43 +13,11 @@ const DIRNAME = require('../DIRNAME');
 const userRoute = require('../3routes/routerUser');
 const tourRoute = require('../3routes/routerTour');
 const reviewRoute = require('../3routes/routerReview');
+const viewRoute = require('../3routes/routerView');
+
 const ErrorClass = require('../utilidades/ErrorClass');
 const ErrorController = require('../2controlador/controllerError'); // globalErrorHandler
 const testRoute = express.Router();
-
-const DB_tour = require('../1modelos/esquemaTour');
-const DB_user = require('../1modelos/esquemaUser');
-
-const jwt = require('jsonwebtoken'); // si es un NPM
-function validarJWT(cookies, next) {
-  let textoJwt = cookies.slice(
-    cookies.indexOf('miJwtCookie') + 'miJwtCookie'.length + 1
-  );
-  if (!textoJwt)
-    return next(new ErrorClass('1.0 No has iniciado sesion! ', 401));
-
-  const indiceFinal =
-    textoJwt.indexOf(' ') < 0 ? textoJwt.length : textoJwt.indexOf(' ');
-  textoJwt = textoJwt.slice(0, indiceFinal);
-
-  return jwt.verify(textoJwt, process.env.JWT_SECRETO);
-}
-
-function rutaInicialGet(req, resp) {
-  resp
-    .status(404) // 200
-    .json({
-      mensaje: '<h1> Metodo .get() </h1>',
-      app: 'Natours',
-    });
-}
-
-function rutaInicialPost(req, resp) {
-  resp.status(200).json({
-    mensaje: '<h1> Metodo .post() </h1>',
-    app: 'Natours',
-  });
-}
 
 //---------------------------------------------------------------------------------------------------
 // 💻 1.0 Se indica el motor del plantillas a utilizar, en este caso 'pug'
@@ -68,75 +36,6 @@ apiWithExpress.use(express.static(path.join(DIRNAME, 'public')));
 // 💻 4.0 AQUI estamos enrutando, pero aun asi te peudes ir cualquier sitio,
 // 💻 4.0 se supone que solo deberias tener acceso a las rutas establecidas por NODE.JS
 // render(allTours.ejs)
-apiWithExpress.get('/home', async (req, resp) => {
-  const data = await DB_tour.find();
-  const dataTours = data.slice(1, data.length - 1);
-  const usuario = undefined;
-
-  resp.status(200).render('allTours', {
-    tituloDinamico: 'titulo dinamico',
-    dataTours: dataTours,
-    usuario: usuario,
-  });
-});
-
-// render(login.ejs)
-apiWithExpress.get('/login', (req, resp) => {
-  const usuario = undefined;
-  resp.status(200).render('login', {
-    usuario: usuario,
-  });
-});
-
-// render(me.ejs)
-apiWithExpress.get('/me', async (req, resp, next) => {
-  //const usuario = await DB_user.findOne({ nombre: 'user Admin' });
-  const jwt = validarJWT(req.headers.cookie, next);
-  console.log(jwt);
-
-  const usuario = await DB_user.findOne({ _id: jwt.id });
-  usuario.photo = usuario.photo || 'user-2.jpg';
-  resp.status(200).render('me', {
-    usuario: usuario,
-  });
-});
-
-// render(tour.ejs)
-apiWithExpress.get('/tour', async (req, resp) => {
-  // revisar --EsquemaReview-- pre(/^find/) this.populate( path:'usuarioId')
-  const tour = await DB_tour.findOne({ nombre: 'The Forest Hiker' });
-  const usuario = await DB_user.findOne({ nombre: 'Xavier Alexander' });
-  usuario.photo = 'user-2.jpg';
-
-  console.log({ reviews: tour.misReviews });
-
-  resp.status(200).render('tour', {
-    tour: tour,
-    usuario: usuario,
-  });
-});
-
-// render(tour.ejs)
-apiWithExpress.get('/tour/:string', async (req, resp) => {
-  console.log({ url: req.url });
-  console.log({ url: req.params.string });
-
-  const tour = await DB_tour.findOne({ nombreSlugify: req.params.string });
-  const usuario = await DB_user.findOne({ nombre: 'Xavier Alexander' });
-  usuario.photo = 'user-2.jpg';
-
-  resp.status(200).render('tour', {
-    tour: tour,
-    usuario: usuario,
-  });
-});
-
-// render(signUp.ejs)
-apiWithExpress.get('/signup', async (req, resp) => {
-  resp.status(200).render('signUp', {
-    usuario: undefined,
-  });
-});
 
 //---------------------------------------------------------------------------------------------------
 
@@ -193,7 +92,7 @@ apiWithExpress.use(
 );
 
 // 💻5.0 Rutas (iniciales, tours, users, text-middleware)
-apiWithExpress.route('/').get(rutaInicialGet).post(rutaInicialPost);
+apiWithExpress.use('/', viewRoute); // enroutar
 apiWithExpress.use('/api/v1/tours', tourRoute); // enroutar
 apiWithExpress.use('/api/v1/users', userRoute); // enroutar
 apiWithExpress.use('/api/v1/reviews', reviewRoute); // enroutar

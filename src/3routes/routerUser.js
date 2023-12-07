@@ -13,11 +13,15 @@ routerUser
 
 routerUser
   .route('/confirmarEmail/:stringRandom') // aqui un usuario normal crea una cuenta. pero solo una cuenta a la vez.
-  .get(controllerAuth.confirmarEmail);
+  .get(controllerAuth.confirmarEmail(), controllerAuth.respuestaEmail);
 
 routerUser
   .route('/login') //
   .post(controllerAuth.login);
+
+routerUser
+  .route('/logout') //
+  .post(controllerAuth.logout);
 
 //----------------------- 1.2 confirmar EMAIL o renovar PASSOWRD
 routerUser

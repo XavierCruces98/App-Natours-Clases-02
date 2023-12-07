@@ -9,9 +9,38 @@ const ErrorClass = require('../utilidades/ErrorClass');
 const sendEmailString = require('../utilidades/sendEmailString');
 
 const localTime = require('../utlidadesPropias/localTime');
-const respuestaWithJWT = require('../utlidadesPropias/respuestaWithJWT');
+const { respuestaWithJWT } = require('../utlidadesPropias/respuestaWithJWT');
 //const { miPromisify02 } = require('../utlidadesPropias/miPromisify');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
+
+function validarJWT(cookies, next) {
+  let textoJwt = cookies.slice(
+    cookies.indexOf('miJwtCookie') + 'miJwtCookie'.length + 1
+  );
+  if (!textoJwt) return '';
+
+  const indiceFinal =
+    textoJwt.indexOf(' ') < 0 ? textoJwt.length : textoJwt.indexOf(' ');
+  textoJwt = textoJwt.slice(0, indiceFinal);
+
+  return jwt.verify(textoJwt, process.env.JWT_SECRETO);
+}
+
+// http://localhost:3000/api/v1/users/logout
+exports.logout = AsyncFunction(async function (req, resp, next) {
+  const nombre = 'miJwtCookie';
+  const offset = new Date().getTimezoneOffset() * 1 * 60 * 1000;
+  const expiraCookie = 0.5 * 1000; // 0.5segundos
+  const opciones = {
+    expires: new Date(Date.now() - offset + expiraCookie),
+    //secure: true, // solo con metodos https, aqui estamos usando http
+    httpOnly: true, // hace que el navegador no pueda acceder al cookie, ni modificarla ni cambiarla,
+  };
+  resp.cookie(nombre, 'loggedout', opciones);
+  resp.status(200).json({
+    status: 'sucess logout',
+  });
+});
 
 //🔵🔵001 Crearte una cuenta ==> revisar (/signup) routeruser.js
 exports.signup = AsyncFunction(async function (req, resp, next) {
@@ -51,7 +80,7 @@ exports.sendEmailSignUp = AsyncFunction(async function (req, resp, next) {
     resetTime: 'emailTimeReset',
     subject: 'Verificar tu EMAIL (valido 10min)',
     text: `Porfavor confirma tu EMAIL con el siguiente URL.`,
-    status: 'Success Email Enviado : Verificacion signup!',
+    status: 'Success Signup',
   };
   // lo malo de esta logica, esque cualquier "String" (sease de "forgotPassword" "signup" )
   //, ambos son validos, y puedes intercambiar STRING random, y eso esta mal
@@ -59,39 +88,59 @@ exports.sendEmailSignUp = AsyncFunction(async function (req, resp, next) {
   sendEmailString(datos, req, resp, next);
 });
 
-exports.confirmarEmail = AsyncFunction(async function (req, resp, next) {
-  // 💻 1.0 creando un Token
-  const randomToken = crypto
-    .createHash('sha256')
-    .update(req.params.stringRandom) // revisar "routerUser"
-    .digest('hex');
-  const vlocalTime = localTime();
+exports.confirmarEmail = function (renderizar = false) {
+  return AsyncFunction(async function (req, resp, next) {
+    // 💻 1.0 creando un Token
+    const randomToken = crypto
+      .createHash('sha256')
+      .update(req.params.stringRandom) // revisar "routerUser"
+      .digest('hex');
+    const vlocalTime = localTime();
 
-  // 💻 2.0 buscando usuario
-  const validarUsuario = await DB_user.findOne({
-    emailResetToken: randomToken,
-    emailTimeReset: { $gte: vlocalTime },
-  }).select('+emailConfirm');
+    // 💻 2.0 buscando usuario
+    const validarUsuario = await DB_user.findOne({
+      emailResetToken: randomToken,
+      emailTimeReset: { $gte: vlocalTime },
+    }).select('+emailConfirm');
 
-  if (!validarUsuario) {
-    return next(
-      new ErrorClass('El token-email es invalido ó El token-email expiro', 400)
-    );
-  }
 
-  // 💻 3.0 restableciendo valores
-  validarUsuario.emailConfirm = true;
-  validarUsuario.emailResetToken = undefined;
-  validarUsuario.emailTimeReset = undefined;
-  await validarUsuario.save({ validateBeforeSave: false }); // esto es necesario para guardar sin ingresar campos obligatorios,
+    if (!validarUsuario && !renderizar) {
+      return next(
+        new ErrorClass(
+          'El token-email es invalido ó El token-email expiro',
+          400
+        )
+      );
+    }
 
-  // 💻 4.0 creando JWT, obligatorio crear un nuevo JWT
-  const data = {
-    status: 'Success Email Verificado!',
-    nombre: validarUsuario.nombre,
-  };
+    if (!validarUsuario && renderizar) {
+      req.errorValidarEmail = true;
+      return next();
+    }
 
-  respuestaWithJWT(resp, validarUsuario, data);
+    // 💻 3.0 restableciendo valores
+    validarUsuario.emailConfirm = true;
+    validarUsuario.emailResetToken = undefined;
+    validarUsuario.emailTimeReset = undefined;
+    await validarUsuario.save({ validateBeforeSave: false }); // esto es necesario para guardar sin ingresar campos obligatorios,
+
+    // 💻 4.0 creando JWT, obligatorio crear un nuevo JWT
+    const misDatos = {
+      status: 'Success Email Verificado!',
+      nombre: validarUsuario.nombre,
+    };
+
+    req.validarUsuario = validarUsuario;
+    req.misDatos = misDatos;
+    req.errorValidarEmail = false;
+
+    next();
+    //respuestaWithJWT(resp, validarUsuario, data);
+  });
+};
+
+exports.respuestaEmail = AsyncFunction(async function (req, resp, next) {
+  respuestaWithJWT(resp, req.validarUsuario, req.misDatos);
 });
 
 //----------------------------------------------------------------------------------------------------
@@ -166,7 +215,6 @@ exports.permisoJWT = AsyncFunction(async function (req, resp, next) {
     token = req.headers.authorization.split(' ')[1];
   }
 
-
   if (!token || token === 'null')
     return next(new ErrorClass('1.0 No has iniciado sesion! ', 401));
 
@@ -180,7 +228,7 @@ exports.permisoJWT = AsyncFunction(async function (req, resp, next) {
   //const resultadoJWT = validarJWT(token, process.env.JWT_SECRETO);
 
   const validarJWT = jwt.verify(token, process.env.JWT_SECRETO);
-  
+
   console.log({ miToken: req.headers.authorization });
 
   // 💻 3.0 revisar si el usuario sigue existiendo,
@@ -342,3 +390,20 @@ exports.updatePassword = AsyncFunction(async function (req, resp, next) {
 
   respuestaWithJWT(resp, validarUsuario, data);
 });
+
+//-------------------------------------------------------------------
+//----------------------------------------------------------------
+exports.verificarLogin = async function (req, resp, next) {
+  try {
+    console.log({ cookie: req.headers.cookie });
+    const jwt = validarJWT(req.headers.cookie, next);
+    const usuario = await DB_user.findOne({ _id: jwt.id });
+    usuario.photo = usuario.photo || 'user-2.jpg';
+    req.usuarioLogeado = usuario;
+
+    return next();
+  } catch (error) {
+    req.usuarioLogeado = undefined;
+    return next();
+  }
+};

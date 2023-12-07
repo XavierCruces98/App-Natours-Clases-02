@@ -141,22 +141,22 @@ const userEsquema = new mongoose.Schema(
 //------------------------------------- 🔴 COMENTAR PARA IMPORTAR DATOS 🔴 -----------------------------------------------------------
 // 💻 1.0 Transformado el PASSWORD a ENCRIPTADO (bcrypt) , antes de guardarlo en la base-de-datos
 
-// userEsquema.pre('save', async function (next) {
-//   // .isModified("password") === FALSE, si el password NO fue modificado/ NO fue creado, entonces no hacemos nada
-//   // .isModified("password") === TRUE, si el password SI fue modificado/ SI fue creado, entonces ENCRIPTAMOS
-//   if (!this.isModified('password')) return next();
+userEsquema.pre('save', async function (next) {
+  // .isModified("password") === FALSE, si el password NO fue modificado/ NO fue creado, entonces no hacemos nada
+  // .isModified("password") === TRUE, si el password SI fue modificado/ SI fue creado, entonces ENCRIPTAMOS
+  if (!this.isModified('password')) return next();
 
-//   // valor = 10 (default) (encripta bien)
-//   // valor = 12 (encripta aun mas pero consume mas cpu)
-//   // valor = 16 (encripta mucho mas pero consume mas mas cpu)
-//   // si dos usuarios tienen la misma contraseña, el encriptado seguira siendo diferente para cada usuario,
+  // valor = 10 (default) (encripta bien)
+  // valor = 12 (encripta aun mas pero consume mas cpu)
+  // valor = 16 (encripta mucho mas pero consume mas mas cpu)
+  // si dos usuarios tienen la misma contraseña, el encriptado seguira siendo diferente para cada usuario,
 
-//   this.password = await bcrypt.hash(this.password, 12); // return "$%&&#$" contraseña encriptada
-//   this.passwordConfirm = undefined; // --passwordConfirm-- es solo para que el usuario escriba bien su contraseña,
+  this.password = await bcrypt.hash(this.password, 12); // return "$%&&#$" contraseña encriptada
+  this.passwordConfirm = undefined; // --passwordConfirm-- es solo para que el usuario escriba bien su contraseña,
 
-//   console.log(`0.0 [HTTP GET] .pre("save) password encriptado `);
-//   next();
-// });
+  console.log(`0.0 [HTTP GET] .pre("save) password encriptado `);
+  next();
+});
 
 //------------------------------------- 🔴 COMENTAR PARA IMPORTAR DATOS 🔴 -----------------------------------------------------------
 

@@ -23,7 +23,8 @@ const sendEmailString = async function (datos, req, resp, next) {
 
   // 💻 3.0 enviar el token a un EMAIL
   const url = `${req.protocol}://${req.get('host')}`;
-  const resetarURL = `${url}/api/v1/users/resetPassword/${randomString}`;
+  const resetarURL = `${url}/api/v1/users/resetPassword/${randomString}`; //URL api
+  const realURL = `${url}/confirmarEmail/${randomString}`; // URL real para el usuario
 
   // colocamos un try/catch, simplemente para simplificarnos la vida (no es necesario)
   // #forma01 === encontrar el error y poner el en "controllerError" si if(err.name==="xxxx") erroClass=function()
@@ -34,7 +35,7 @@ const sendEmailString = async function (datos, req, resp, next) {
       from: `Xavier Alexander <${correoRemitente}>`, // aqui puedes poner cualquier correoOrigen, porque estamos trabajando con "mailTrap"
       to: usuarioActual.email, //(email_user === email destino)
       subject: `${datos.subject}`,
-      text: `${datos.text} ${resetarURL}`,
+      text: `${datos.text} \n ${resetarURL} \n ${realURL} `,
       //html: "<h1>probando</h1>"
     });
 

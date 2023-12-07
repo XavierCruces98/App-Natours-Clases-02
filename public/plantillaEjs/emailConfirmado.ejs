@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include ("./_head",{titulo: "App | ConfirmarEmail"}); %>
+  <body>
+    <!------------------1.0 CABEZERA ------------->
+    <header class="cabezera">
+      <nav class="navegador navegador--tours">
+        <form class="navegador--buscador">
+          <button class="navegador--buscador-boton">
+            <svg>
+              <use xlink:href="/imagenes/iconos.svg#icon-search"></use>
+            </svg>
+          </button>
+          <input
+            type="text"
+            placeholder="buscar tours"
+            class="navegador--buscador-input"
+          />
+        </form>
+      </nav>
+      <div class="cabezera-logo">
+        <a href="/home">
+          <img
+            id="home"
+            class="navegador--elemento"
+            src="/imagenes/logo-white.png"
+            alt="aplicacion logo"
+          />
+        </a>
+      </div>
+
+      <nav class="navegador navegador--usuarios">
+        <!-- nota si o si desde el servidor debes pasarle la variable "user" -->
+        <!-- nota con el "href" cambias la direcion URL sin necesidad de JS -->
+      </nav>
+
+      <!-- <button class="nav__el">Log in</button>
+        <button class="nav__el nav__el--cta">Sign up</button> -->
+    </header>
+
+    <!------------------3.0 MAING ------------->
+    <main class="main">
+      <div class="formulario-signup">
+        <% if(errorValidarEmail) { %>
+        <h2 class="titulo-secundario quick-facts">
+          Ha sucedido un error :(
+        </h2>
+        <p class="formulario--label" for="nombre">
+          Intente de nuevo
+        </p>
+      </div>
+      <% } else {  %>
+      <% %>
+        <h2 class="titulo-secundario quick-facts">
+          Tu Email ha sido verificado !
+        </h2>
+        <p class="formulario--label" for="nombre">
+          Ya puedes explorar nuestra aplicacion 😊
+        </p>
+      </div>
+      <% }; %>
+
+
+    </main>
+    <!------------------3.0 FOOTER ------------->
+    <%- include ("./_footer") %>
+  </body>
+</html>
