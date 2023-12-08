@@ -34,7 +34,17 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <%- include ("./_head",{titulo: "App | Tour"}); %>
+  <head>
+    <%- include ("./_head",{titulo: `App | ${tituloDinamico}` , mapa: true });
+    %>
+    <!-- nota aqui no funciona los script externos, el ".ejs" ya no lo uses nunca mas -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+  </head>
+
   <body>
     <!------------------1.0 CABEZERA ------------->
     <%- include ("./_header"); %>
@@ -65,7 +75,7 @@
 
           <div class="titulo-box--detalles">
             <svg class="titulo-box--icono">
-              <use xlink:href="/imagenes/icons.svg#icon-map-pin"></use>
+              <use xlink:href="/imagenes/iconos.svg#icon-map-pin"></use>
             </svg>
             <span class="titulo-box--texto">
               <%= tour.locacionStart.descripcion %>
@@ -135,7 +145,7 @@
     <section class="seccion-mapa">
       <div
         id="mapa"
-        data-locations="<%= JSON.stringify(tour.locaciones) %>"
+        data-mislocaciones="<%= JSON.stringify(tour.locaciones) %>"
       ></div>
     </section>
 

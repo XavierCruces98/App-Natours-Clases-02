@@ -1,0 +1,105 @@
+//- Define the resumenBox function
+mixin resumenBox(label, texto, icono)
+  .resumen-box--detalles
+    svg.resumen-box--icono
+      use(xlink:href=`/imagenes/iconos.svg#icon-${icono}`)
+    span.resumen-box--label= label
+    span.resumen-box--texto= texto
+
+//- Define the tarjetaReview function
+mixin tarjetaReview(elemento)
+  .reviews--tarjeta
+    .reviews--avatar
+      img.reviews--avatar-img(src=`/imagenes/usuarios/${elemento.usuarioId.photo}`, alt=`${elemento.usuarioId.nombre}`)
+      h6.reviews--usuario= elemento.usuarioId.nombre
+    p.reviews--texto= elemento.comentario
+    .reviews--rating
+      - const miArray = [1,2,3,4,5]
+      each puntaje in miArray
+        svg.reviews--estrella(class=`reviews--estrella reviews--estrella--${elemento.calificacion >= puntaje ? 'activo' : 'inactivo'}`)
+          use(xlink:href="/imagenes/iconos.svg#icon-star")
+
+//- Pug Document
+doctype html
+html
+  
+  //- aqui si hay que poner "tituloDinamico" porque varia segun cada tour (url:nombreSlugify)
+  - const titulo= `App | ${tituloDinamico}`
+  - const mapa = true
+  include _head
+
+  //- "extends" es como incluir, y "block" es para extender el --block-- que este dentro de --_head--
+
+
+
+  body
+    include ./_header
+
+    section.seccion-titulo
+      .titulo--heroe
+        .titulo--heroe-overlay &nsbp;
+        img.titulo--heroe-imagen(src=`/imagenes/tours/${tour.imageCover}`, alt=`${tour.nombre}`)
+      .titulo-box
+        h1.titulo-primario
+          span= tour.nombre
+        .titulo-box--grupo
+          .titulo-box--detalles
+            svg.titulo-box--icono
+              use(xlink:href="/imagenes/iconos.svg#icon-clock")
+            span.titulo-box--texto= `${tour.duracion} dias`
+          .titulo-box--detalles
+            svg.titulo-box--icono
+              use(xlink:href="/imagenes/iconos.svg#icon-map-pin")
+            span.titulo-box--texto= tour.locacionStart.descripcion
+
+    section.seccion-descripcion
+      .resumen-box
+        div
+          .resumen-box--grupo
+            h2.titulo-secundario.quick-facts Preguntas Frecuentes
+            +resumenBox('Siguiente Fecha', tour.startDates[0].toLocaleString('es-PE', { month: 'long', year: 'numeric' }), 'calendar')
+            +resumenBox('Dificultad', tour.dificultad, 'trending-up')
+            +resumenBox('Participantes', `${tour.maxGroupSize} personas`, 'user')
+            +resumenBox('Calificacion', `${tour.ratingsAverage}/5`, 'star')
+
+          .resumen-box--grupo
+            h2.titulo-secundario.quick-facts Tus Guias❗
+            each usuario in tour.misUsuarios
+              .resumen-box--detalles
+                img.resumen-box--imagen(src=`/imagenes/usuarios/${usuario.photo}`, alt=`${usuario.nombre}`)
+                if usuario.role === 'lider-guia'
+                  span.resumen-box--label Lider Guia
+                else if usuario.role === 'guia'
+                  span.resumen-box--label Guia
+                span.resumen-box--texto= usuario.nombre
+
+      .descripcion-box
+        h2.titulo-secundario.quick-facts Sobre el tour #{tour.nombre}
+        each elemento in tour.descripcion.split('\n')
+          p.descripcion--texto= elemento
+
+    section.seccion-imagenes
+      each elemento, index in tour.imagenes
+        div
+          img.imagen-box--img(class=`imagen-box--img--${index + 1}` ,src=`/imagenes/tours/${elemento}`, alt=`The Park Camper Tour ${index + 1}`)
+
+    section.seccion-mapa
+      #mapa(data-mislocaciones=JSON.stringify(tour.locaciones))
+
+    section.seccion-reviews
+      .reviews
+        each elemento in tour.misReviews
+          +tarjetaReview(elemento)
+
+    section.seccion-cuenta
+      .cuenta
+        .cuenta--img.cuenta--img-logo
+          img(src="/imagenes/logo-white.png", alt="Logo de Natours")
+        img.cuenta--img.cuenta--img-1(src=`/imagenes/tours/${tour.imagenes[1]}`, alt="Imagen Tour")
+        img.cuenta--img.cuenta--img-2(src=`/imagenes/tours/${tour.imagenes[2]}`, alt="Imagen Tour")
+
+        .cuenta--contenido
+          h2.titulo-secundario Que estas esperando?
+          p.cuenta--texto= `${tour.duracion} dias. 01 Aventura ❗ . Infinitas memorias. Hazlo tuyos hoy!`
+          button.boton.boton--verde.span--all--rows Libro Tour Ahora!
+    include ./_footer

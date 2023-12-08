@@ -1,18 +1,20 @@
-  <% function navegadorItem(link,texto,icono,activo){ %> <% const claseActivo =
-  activo ? "side-navegador--activo" : "" %>
-  <li class="<%= claseActivo %>">
-    <a href="<%= link %>">
-      <svg>
-        <use xlink:href="/imagenes/iconos.svg#icon-<%= icono %>"></use>
-      </svg>
-      <%= texto %>
-    </a>
-  </li>
-  <% }; %>
+<% function navegadorItem(link,texto,icono,activo){ %> <% const claseActivo =
+activo ? "side-navegador--activo" : "" %>
+<li class="<%= claseActivo %>">
+  <a href="<%= link %>">
+    <svg>
+      <use xlink:href="/imagenes/iconos.svg#icon-<%= icono %>"></use>
+    </svg>
+    <%= texto %>
+  </a>
+</li>
+<% }; %>
 
-  <!DOCTYPE html>
-  <html lang="en">
-  <%- include ("./_head",{titulo: "App | Perfil"}); %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ("./_head",{titulo: "App | Perfil"}); %>
+  </head>
   <body>
     <!------------------1.0 CABEZERA ------------->
     <%- include ("./_header"); %>

@@ -1,4 +1,7 @@
+// const api = require('./controlador/api.js');
 import * as api from './controlador/api.js';
+
+
 const botonLogout = document.querySelector('#btn-logout');
 
 if (window.location.pathname === '/login') await formLogin();

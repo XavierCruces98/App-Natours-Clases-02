@@ -1,0 +1,15 @@
+head  
+  meta(charset="UTF-8")
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+  -if(mapa)
+    script(type="module", defer, src="./../js/mapa.js")
+    script(src='https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js')
+    link(href='https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css' rel='stylesheet')
+
+  //- el CSS debe de ir despues, para reemplazar al css de mapbox de arriba
+  link(rel="stylesheet", href="./../css/estilos.css")
+  link(rel="shortcut icon", type="image/png", href="/imagenes/favicon.png")
+  //-  script(type="module", defer, src="./../js/home.js") // tira error
+  script(type="module" defer src="./../js/home.js")  
+  title #{titulo}

@@ -1,0 +1,33 @@
+//- Pug Document
+doctype html
+html(lang="en")
+  - const titulo= `App | Signup`
+  include _head
+
+  body
+    include ./_header.pug
+
+    main.main
+      .formulario-signup
+        h2.titulo-secundario.quick-facts Crea tu Cuenta
+        form#formulario-signup(action="", method="POST")
+          .formulario--grupo
+            label.formulario--label(for="nombre") Nombre
+            input#nombre.formulario--input(type="text", placeholder="Ingresa tu nombre", minlength="1", maxlength="40", required)
+
+          .formulario--grupo
+            label.formulario--label(for="email") Email
+            input#email.formulario--input(type="text", placeholder="miemail@ejemplo.com", required)
+
+          .formulario--grupo
+            label.formulario--label(for="password") Password
+            input#password.formulario--input(type="password", placeholder="Ingresa tu contraseña", minlength="8", required)
+
+          .formulario--grupo
+            label.formulario--label(for="password-confirm") Confirmar Password
+            input#password-confirm.formulario--input(type="password", placeholder="Confirma tu contraseña", minlength="8", required)
+
+          .formulario--grupo
+            button.boton.boton--verde(type="submit") Sign Up
+
+    include ./_footer.pug

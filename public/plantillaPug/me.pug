@@ -1,0 +1,82 @@
+//- Define the navegadorItem mixin
+mixin navegadorItem(link, texto, icono, activo)
+  - const claseActivo = activo ? "side-navegador--activo" : ""
+  li(class=claseActivo)
+    a(href=link)
+      svg
+        use(xlink:href=`/imagenes/iconos.svg#icon-${icono}`)
+      = texto
+
+//- Pug Document
+doctype html
+html(lang="en")
+
+  - const titulo= `App | Perfil`
+  include _head
+
+  body
+    include ./_header.pug
+
+    main.main
+      .usuario-vista
+        nav.usuario-vista--menu
+          ul.side-navegador
+            +navegadorItem("#", "Opciones", "settings", true)
+            +navegadorItem("#", "Mi Reservas", "briefcase", false)
+            +navegadorItem("#", "Mi Reviews", "star", false)
+            +navegadorItem("#", "Facturacion", "credit-card", false)
+            if(usuario.role === "admin")
+              .admin-navegador
+                h5.admin-navegador--titulo Admin
+                ul.side-navegador
+                  +navegadorItem("#", "Manejar Tours", "map", false)
+                  +navegadorItem("#", "Manejar Usuarios", "users", false)
+                  +navegadorItem("#", "Manejar Reviews", "star", false)
+                  +navegadorItem("#", "Manejar Bookings", "briefcase", false)
+
+        .usuario-vista--contenido
+          .usuario-vista--formulario-contenido
+            h2.titulo-secundario.quick-facts Opciones
+
+            //- WITHOUT API
+            //- form(action="/submit-user-data", method="POST")
+
+            //- WITH API
+            form(action="")
+              .formulario--grupo
+                label.formulario--label(for="nombre") Nombre
+                input#nombre.formulario--input(type="text", required, name="nombre")
+
+              .formulario--grupo.quick-facts
+                label.formulario--label(for="email") Email
+                input#email.formulario--input(type="text", value=usuario.email, required, name="email")
+
+              .formulario--grupo.formulario--foto-upload
+                img.formulario--usuario-foto(src=`/imagenes/usuarios/${usuario.photo}`, alt=`foto de ${usuario.nombre}`)
+                a.boton-texto(href="") Escoge una foto
+
+              .formulario--grupo.derecho
+                button.boton.boton--pequeno.boton--verde Guardar cambios
+
+          .linea &nbsp;
+
+          .usuario-vista--formulario-contenido
+            h2.titulo-secundario.quick-facts Cambiar password
+
+            form(action="")
+              .formulario--grupo
+                label.formulario--label(for="password-actual") Actual password
+                input#password-actual.formulario--input(type="password", placeholder="Ingresar su password actual", required)
+
+              .formulario--grupo
+                label.formulario--label(for="password-nuevo") Nuevo Password
+                input#password-nuevo.formulario--input(type="password", placeholder="Ingresar su password nuevo", required)
+
+              .formulario--grupo.quick-facts
+                label.formulario--label(for="password-confirm") Confirmar Password Nuevo
+                input#password-confirm.formulario--input(type="password", placeholder="Confirmar su password nuevo", required)
+
+              .formulario--grupo.derecho
+                button.boton.boton--pequeno.boton--verde Guardar Password
+
+    include ./_footer.pug

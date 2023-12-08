@@ -1,0 +1,57 @@
+//- nota en .pug fijate siempre la linea final de tu documento
+//- NO DEBE DE HABER ESPACIOS O SALTO DE LINEAS al final de tu codigo
+
+doctype html
+html(lang="en")
+  - const titulo= `App | Home`
+  include _head
+
+  body
+    include ./_header
+
+    main.main
+      .tarjeta-contenedor
+        each element in dataTours
+          .tarjeta
+            .tarjeta--cabezera
+              .tarjeta--figura
+                .tarjeta--figura-overlay &nbsp;
+                img.tarjeta--figura-imagen(src=`/imagenes/tours/${element.imageCover}`, alt=`${element.nombre}`)
+              h3.titulo-terciario
+                span= element.nombre
+
+            .tarjeta--detalles
+              h4.tarjeta--sub-cabezera=`${element.dificultad} ${element.duracion} - dias`
+              p.tarjeta--texto= element.resumen
+
+              .tarjeta--datos
+                svg.tarjeta--icono
+                  use(xlink:href="/imagenes/iconos.svg#icon-map-pin")
+                span= element.locacionStart.descripcion
+
+              .tarjeta--datos
+                svg.tarjeta--icono
+                  use(xlink:href="/imagenes/iconos.svg#icon-calendar")
+                span= element.startDates[0].toLocaleString('es-Pe', {month:'long', year: 'numeric'})
+
+              .tarjeta--datos
+                svg.tarjeta--icono
+                  use(xlink:href="/imagenes/iconos.svg#icon-flag")
+                span= `${element.locaciones.length} paradas`
+
+              .tarjeta--datos
+                svg.tarjeta--icono
+                  use(xlink:href="/imagenes/iconos.svg#icon-user")
+                span= `${element.maxGroupSize} personas`
+
+            .tarjeta--footer
+              p
+                span.tarjeta--footer-valor= element.precio
+                span.tarjeta--footer-texto por persona
+
+              p.tarjeta--ratings
+                span.tarjeta--footer-valor= element.ratingsAverage
+                span.tarjeta--footer-texto= `#Ratings: ${element.ratingsQuantity}`
+
+              a.boton.boton--verde.boton--pequeno(href=`/tour/${element.nombreSlugify}`) detalles
+    include ./_footer.pug

@@ -13,19 +13,6 @@ const { respuestaWithJWT } = require('../utlidadesPropias/respuestaWithJWT');
 //const { miPromisify02 } = require('../utlidadesPropias/miPromisify');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 
-function validarJWT(cookies, next) {
-  let textoJwt = cookies.slice(
-    cookies.indexOf('miJwtCookie') + 'miJwtCookie'.length + 1
-  );
-  if (!textoJwt) return '';
-
-  const indiceFinal =
-    textoJwt.indexOf(' ') < 0 ? textoJwt.length : textoJwt.indexOf(' ');
-  textoJwt = textoJwt.slice(0, indiceFinal);
-
-  return jwt.verify(textoJwt, process.env.JWT_SECRETO);
-}
-
 // http://localhost:3000/api/v1/users/logout
 exports.logout = AsyncFunction(async function (req, resp, next) {
   const nombre = 'miJwtCookie';
@@ -102,7 +89,6 @@ exports.confirmarEmail = function (renderizar = false) {
       emailResetToken: randomToken,
       emailTimeReset: { $gte: vlocalTime },
     }).select('+emailConfirm');
-
 
     if (!validarUsuario && !renderizar) {
       return next(
@@ -395,9 +381,12 @@ exports.updatePassword = AsyncFunction(async function (req, resp, next) {
 //----------------------------------------------------------------
 exports.verificarLogin = async function (req, resp, next) {
   try {
-    console.log({ cookie: req.headers.cookie });
-    const jwt = validarJWT(req.headers.cookie, next);
-    const usuario = await DB_user.findOne({ _id: jwt.id });
+    // console.log({ cookie: req.headers.cookie });
+    // const jwt = validarJWT(req.headers.cookie, next);
+    // nota necesitas de --require('cookie-parser')-- para --req.cookies--
+
+    const token = jwt.verify(req.cookies.miJwtCookie, process.env.JWT_SECRETO);
+    const usuario = await DB_user.findOne({ _id: token.id });
     usuario.photo = usuario.photo || 'user-2.jpg';
     req.usuarioLogeado = usuario;
 
@@ -407,3 +396,16 @@ exports.verificarLogin = async function (req, resp, next) {
     return next();
   }
 };
+
+// function validarJWT(cookies, next) {
+//   let textoJwt = cookies.slice(
+//     cookies.indexOf('miJwtCookie') + 'miJwtCookie'.length + 1
+//   );
+//   if (!textoJwt) return '';
+
+//   const indiceFinal =
+//     textoJwt.indexOf(' ') < 0 ? textoJwt.length : textoJwt.indexOf(' ');
+//   textoJwt = textoJwt.slice(0, indiceFinal);
+
+//   return jwt.verify(textoJwt, process.env.JWT_SECRETO);
+// }

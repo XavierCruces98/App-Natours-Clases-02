@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+  - const titulo= `App | Login`
+  include _head
+
+  body
+    include ./_header
+
+    main.main
+      .formulario-login
+        h2.titulo-secundario.quick-facts Ingresar a tu Cuenta
+        form(name="formulario-login", id="formulario-login", action="", method="POST")
+          .formulario--grupo
+            label.formulario--label(for="email") Email
+            input#email.formulario--input(type="email", placeholder="you@example.com", required)
+
+          .formulario--grupo.quick-facts
+            label.formulario--label(for="password") Password
+            input#password.formulario--input(type="password", placeholder="••••••••", required, minlength="8")
+
+          .formulario--grupo
+            button.boton.boton--verde(type="submit") Login
+
+    include ./_footer.pug

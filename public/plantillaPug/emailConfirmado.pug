@@ -1,0 +1,33 @@
+//- Pug Document
+doctype html
+html(lang="en")
+  - const titulo= `App | ConfirmarEmail`
+  include _head
+
+  body
+    header.cabezera
+      nav.navegador.navegador--tours
+        form.navegador--buscador
+          button.navegador--buscador-boton
+            svg
+              use(xlink:href="/imagenes/iconos.svg#icon-search")
+          input.navegador--buscador-input(type="text", placeholder="buscar tours")
+
+      .cabezera-logo
+        a(href="/home")
+          img#home.navegador--elemento(src="/imagenes/logo-white.png", alt="aplicacion logo")
+
+      nav.navegador.navegador--usuarios
+        //- nota: desde el servidor, debes pasar la variable "user"
+        //- nota: con "href" cambias la dirección URL sin necesidad de JS
+
+    main.main
+      .formulario-signup
+        - if (errorValidarEmail)
+          h2.titulo-secundario.quick-facts Ha sucedido un error :(
+          p.formulario--label(for="nombre") Intente de nuevo
+        - else
+          h2.titulo-secundario.quick-facts Tu Email ha sido verificado !
+          p.formulario--label(for="nombre") Ya puedes explorar nuestra aplicación 😊
+
+    include ./_footer.pug

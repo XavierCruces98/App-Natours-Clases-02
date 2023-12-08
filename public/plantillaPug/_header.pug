@@ -1,0 +1,21 @@
+header.cabezera
+  nav.navegador.navegador--tours
+    form.navegador--buscador
+      button.navegador--buscador-boton
+        svg
+          use(xlink:href="/imagenes/iconos.svg#icon-search")
+      input(type="text", placeholder="buscar tours", class="navegador--buscador-input")
+
+  .cabezera-logo
+    a(href="/home")
+      img.navegador--elemento#home(src="/imagenes/logo-white.png", alt="aplicacion logo")
+
+  nav.navegador.navegador--usuarios
+    - if (usuario)
+      a.navegador--elemento#btn-logout(href="/home") Log out
+      a.navegador--elemento(href="/me")
+        img.navegador--usuario-imagen(src=`/imagenes/usuarios/${usuario.photo}`, alt=`foto de ${usuario.nombre}`)
+        span= `${usuario.nombre}`
+    - if (!usuario)
+      a.navegador--elemento#btn-login(href="/login") Login
+      a.navegador--elemento.navegador--elemento-cuenta#btn-signup(href="/signup") Sign up

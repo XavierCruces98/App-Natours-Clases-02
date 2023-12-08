@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+//const pug = require('pug');
 
 const apiWithExpress = express(); // es como new http()
 const DIRNAME = require('../DIRNAME');
@@ -19,23 +20,33 @@ const ErrorClass = require('../utilidades/ErrorClass');
 const ErrorController = require('../2controlador/controllerError'); // globalErrorHandler
 const testRoute = express.Router();
 
+const cookieParser = require('cookie-parser');
+apiWithExpress.use(cookieParser()); // nota ahora recien nuestro "req" tiene "req.cookies"
+// 💻  0.0 ejemplo de un middleware (debe de ir antes de cualquier route)
+apiWithExpress.use((req, resp, next) => {
+  // Esto es un ejemplo, tmb puedes ver variables & headers & req.params de la URL
+  //console.log(req.headers, req.body, req.params); // se dispara cada vez que se realiza una REQUEST a nuestra API
+
+  // console.log({cookieParser: req.cookies});
+  next();
+});
+
 //---------------------------------------------------------------------------------------------------
 // 💻 1.0 Se indica el motor del plantillas a utilizar, en este caso 'pug'
 // apiWithExpress.set('view engine', 'html'); // esto  no se puede :( por eso usamos 'pug'
-// apiWithExpress.set('view engine', 'pug'); // para pug
+apiWithExpress.set('view engine', 'pug'); // para pug
 // apiWithExpress.engine('ejs', engine);
-apiWithExpress.set('view engine', 'ejs');
+// apiWithExpress.set('view engine', 'ejs');
 
 // 💻 2.0 Se indica el directorio donde se almacenarán las plantillas PUG (set)
 //apiWithExpress.set('views', path.join(DIRNAME, 'public/pugPlantillas'));
-apiWithExpress.set('views', path.join(DIRNAME, 'public/plantillaEjs'));
+apiWithExpress.set('views', path.join(DIRNAME, 'public/plantillaPug'));
 
 // 💻 3.0 Se indica el directorio donde se almacenarán nuestra informacion(css,js,etc)(express.static + USE)
 apiWithExpress.use(express.static(path.join(DIRNAME, 'public')));
 
 // 💻 4.0 AQUI estamos enrutando, pero aun asi te peudes ir cualquier sitio,
 // 💻 4.0 se supone que solo deberias tener acceso a las rutas establecidas por NODE.JS
-// render(allTours.ejs)
 
 //---------------------------------------------------------------------------------------------------
 
@@ -91,16 +102,16 @@ apiWithExpress.use(
   })
 );
 
-// 💻5.0 Rutas (iniciales, tours, users, text-middleware)
+// 💻6.0 Rutas (iniciales, tours, users, text-middleware)
 apiWithExpress.use('/', viewRoute); // enroutar
 apiWithExpress.use('/api/v1/tours', tourRoute); // enroutar
 apiWithExpress.use('/api/v1/users', userRoute); // enroutar
 apiWithExpress.use('/api/v1/reviews', reviewRoute); // enroutar
 apiWithExpress.use('/api/v1/test-middleware', testRoute); // enroutar
 
-// 💻6.0 .all("*") Cualquier otra ruta que no sea los de arriba (3.0 rutas)
-// 💻6.0 Aqui estamos diciendo, Para cualquier otra ruta, retornar un "Error" ==>> next( new ErrorClass ("ruta no valida") )
-// 💻6.0 Si este .all("*"), lo ponemos arriba, no podremos acceder a ninguna URL,
+// 💻7.0 .all("*") Cualquier otra ruta que no sea los de arriba (3.0 rutas)
+// 💻7.0 Aqui estamos diciendo, Para cualquier otra ruta, retornar un "Error" ==>> next( new ErrorClass ("ruta no valida") )
+// 💻7.0 Si este .all("*"), lo ponemos arriba, no podremos acceder a ninguna URL,
 
 apiWithExpress.all('*', (req, resp, next) => {
   // next() al momento de pasarle un error, reconoce automaticamente que se trata de un error
@@ -110,15 +121,6 @@ apiWithExpress.all('*', (req, resp, next) => {
   );
 });
 
-// 💻 7.0 ejemplo de un middleware
-apiWithExpress.use((req, resp, next) => {
-  // Esto es un ejemplo, tmb puedes ver variables & headers & req.params de la URL
-  //console.log(req.headers, req.body, req.params);
-
-  // siempre se pone ""next()"" cuando no hay una respuesta --resp.status(200).json({})---
-  // si hubiera una respuesta --resp.status(200).json({})--- ya no se pone ---.next()---
-  next();
-});
 // 💻 8.0 Esto es el "middleware-error-general"
 apiWithExpress.use(ErrorController);
 

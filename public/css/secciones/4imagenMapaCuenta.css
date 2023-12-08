@@ -54,24 +54,66 @@
 }
 
 .mapa-box {
-  background-image: url('../img/pin.png');
+  background-image: url('./../../imagenes/pin.png'); /* buscar imagen*/
   background-size: cover;
   width: 32px;
   height: 40px;
   cursor: pointer;
+  border-radius: 40px;
 }
 
-.mapa-box-popup {
+.mapa-propio-popup {
+  /* font-family: Arial, Helvetica, sans-serif; */
+  /* font-weight: 600; */
+  font-size: 12px;
+  text-align: center;
+  color: black;
+}
+
+/*.mapa-box-popup*/
+/* .mapboxgl-popup {
   max-width: 25rem;
-}
+} */
 
-.mapa-box-popup-contenido {
+/*.mapa-box-popup-contenido*/
+.mapboxgl-popup-content {
   text-align: center;
   font-family: 'Lato', sans-serif;
-  padding: 1.5rem !important;
+  /* padding: 1.5rem !important; */
   font-size: 1.4rem;
-  -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15) !important;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15) !important;
+  /* -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15) !important; */
+  padding: 10px;
+  background: #fffefe;
+  border: 1px solid black;
+
+  /* width: 20rem; */
+}
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top: 10px solid black;
+  border-bottom: 2px solid transparent; /*subes y bajas*/
+  border-left: 10px solid transparent;
+  /* border-right: 10px solid black; */
+}
+
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-top: 10px solid transparent;
+  border-bottom: 2px solid black; /*subes y bajas*/
+  border-left: 10px solid transparent;
+  /* border-right: 10px solid black; */
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; /*subes y bajas*/
+  /* border-left: 10px solid transparent; */
+  border-right: 10px solid black;
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; /*subes y bajas*/
+  border-left: 10px solid black;
+  /* border-right: 10px solid black; */
 }
 
 /*---------------   03 SECION CUENTA ----------------------*/
