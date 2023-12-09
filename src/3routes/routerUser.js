@@ -13,7 +13,7 @@ routerUser
 
 routerUser
   .route('/confirmarEmail/:stringRandom') // aqui un usuario normal crea una cuenta. pero solo una cuenta a la vez.
-  .get(controllerAuth.confirmarEmail(), controllerAuth.respuestaEmail);
+  .get(controllerAuth.verificarEmailConString(), controllerAuth.respuestaEmail);
 
 routerUser
   .route('/login') //

@@ -1,10 +1,13 @@
 //- nota en .pug fijate siempre la linea final de tu documento
 //- NO DEBE DE HABER ESPACIOS O SALTO DE LINEAS al final de tu codigo
 
+
+
 doctype html
 html(lang="en")
   - const titulo= `App | Home`
   include _head
+  //- p= dataTours // esta es la unica forma de hacer un  "consolelog" para que NO interfiera con nuestro "Content-Security-Policy"
 
   body
     include ./_header

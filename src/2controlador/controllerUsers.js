@@ -5,7 +5,7 @@ const DB_user = require('../1modelos/esquemaUser');
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 
-const { respuestaWithJWT } = require('../utlidadesPropias/respuestaWithJWT');
+const { respWithJwtYCookie } = require('../utlidadesPropias/respWithJwtYCookie');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 const handlerFactory = require('./handlerFactory');
 
@@ -53,8 +53,8 @@ exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   );
 
   // 💻 4.1 respuesta
-  respuestaWithJWT(resp, documentUpdate, {
-    status: 'sucess updatePerfil',
+  respWithJwtYCookie(resp, documentUpdate, {
+    status: 'success updatePerfil',
     documentUpdate,
   });
 });
@@ -84,7 +84,7 @@ exports.deletePerfil = AsyncFunction(async function (req, resp, next) {
   );
 
   resp.status(201).json({
-    status: 'sucess deletePerfil',
+    status: 'success deletePerfil',
     documentUpdate,
   });
 });

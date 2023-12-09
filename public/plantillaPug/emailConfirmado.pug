@@ -23,11 +23,12 @@ html(lang="en")
 
     main.main
       .formulario-signup
-        - if (errorValidarEmail)
-          h2.titulo-secundario.quick-facts Ha sucedido un error :(
-          p.formulario--label(for="nombre") Intente de nuevo
-        - else
+        //-p= usuarioLocal
+        - if (usuarioLocal?.emailConfirm)
           h2.titulo-secundario.quick-facts Tu Email ha sido verificado !
           p.formulario--label(for="nombre") Ya puedes explorar nuestra aplicación 😊
+        - else
+          h2.titulo-secundario.quick-facts Ha sucedido un error :(
+          p.formulario--label(for="nombre") Intente de nuevo
 
     include ./_footer.pug

@@ -1,8 +1,14 @@
 // const api = require('./controlador/api.js');
 import * as api from './controlador/api.js';
-
+import { mostrarAlerta } from './controlador/alerta.js';
 
 const botonLogout = document.querySelector('#btn-logout');
+
+if (window.location.pathname.includes('confirmarEmail')) {
+  window.setTimeout(function () {
+    window.location.replace('/home');
+  }, 1500);
+}
 
 if (window.location.pathname === '/login') await formLogin();
 if (window.location.pathname === '/signup') await formSignup();
@@ -28,7 +34,9 @@ async function formLogin() {
     const regex =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
-    if (!regex.test(email) || password === '') return;
+    if (!regex.test(email) || password === '') {
+      return;
+    }
 
     console.log(` FORMULARIO LOGIN`, { email, password });
     await api.login(email, password);
@@ -48,11 +56,15 @@ async function formSignup() {
     const passwordConfirm = document.querySelector('#password-confirm').value;
 
     const regexNombre = /^[A-Za-z\s]+$/;
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+    // const regexEmail = // el html ya valida @correos creo
+    //   /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
-    if (!regexEmail.test(email) || !regexNombre.test(nombre) || password === '')
-      return;
+    if (!regexNombre.test(nombre) || password === '') return;
+
+    if (password !== passwordConfirm) {
+      mostrarAlerta('error', 'Los Password nos coinciden ❗');
+      return; // El return es importante para que no continue
+    }
 
     console.log(` FORMULARIO SIGNUP`, {
       nombre,

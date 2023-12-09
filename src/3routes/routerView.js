@@ -15,22 +15,25 @@ routerView.route('/login').get(
   controllerAuth.verificarLogin, //
   controllerView.login
 );
-
-routerView.route('/emailEnviado').get(controllerView.emailEnviado);
-
-routerView.route('/confirmarEmail/:stringRandom').get(
-  controllerAuth.confirmarEmail(true), //validar email
-  controllerView.emailConfirmado
-);
-
 routerView.route('/me').get(
   controllerAuth.verificarLogin, //
   controllerView.perfil
 );
+
+//---------------------------------------------
+routerView.route('/emailEnviado').get(controllerView.emailEnviado);
+
+routerView.route('/confirmarEmail/:stringRandom').get(
+  controllerAuth.verificarLogin, 
+  controllerAuth.verificarEmailConString(true), //validar email
+  controllerView.emailConfirmado
+);
+
 routerView.route('/signup').get(
   controllerAuth.verificarLogin, //
   controllerView.signup
 );
+
 routerView.route('/tour/:string').get(
   controllerAuth.verificarLogin, //
   controllerView.tour

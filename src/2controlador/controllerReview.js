@@ -83,7 +83,7 @@ exports.patchReviewId = AsyncFunction(async function (req, resp, next) {
   validar(documentUpdate, req, next);
 
   resp.status(201).json({
-    status: 'sucess patchReviewId',
+    status: 'success patchReviewId',
     documentUpdate,
   });
 });
@@ -100,7 +100,7 @@ exports.deleteReviewId = AsyncFunction(async function (req, resp, next) {
   validar(documentDelete, req, next);
 
   resp.status(201).json({
-    status: 'sucess deleteReviewId',
+    status: 'success deleteReviewId',
     documentDelete,
   });
 });

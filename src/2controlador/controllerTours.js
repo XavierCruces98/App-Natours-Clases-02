@@ -14,7 +14,7 @@ exports.getAgrupamientoAno = AsyncFunction(async function (req, resp, next) {
   );
 
   resp.status(201).json({
-    status: 'sucess getAllTour',
+    status: 'success getAllTour',
     estadisticas,
   });
 });
@@ -22,7 +22,7 @@ exports.getAgrupamientoAno = AsyncFunction(async function (req, resp, next) {
 exports.getAgrupamiento = AsyncFunction(async function (req, resp, next) {
   const estadisticas = await DB_tour.aggregate(Consultas.array_Separado01);
   resp.status(201).json({
-    status: 'sucess getAllTour',
+    status: 'success getAllTour',
     estadisticas,
   });
 });
@@ -78,7 +78,7 @@ exports.getIdTourIdReview = AsyncFunction(async function (req, resp, next) {
   }
 
   resp.status(200).json({
-    status: 'sucess getId',
+    status: 'success getId',
     data: {
       review,
     },
@@ -123,7 +123,7 @@ exports.toursCercanos = AsyncFunction(async function (req, resp, next) {
   const documentFind = await DB_tour.find(consulta);
 
   resp.status(200).json({
-    status: 'sucess ToursCercanos',
+    status: 'success ToursCercanos',
     documents: documentFind.length,
     data: {
       documentFind,
@@ -174,7 +174,7 @@ exports.tourDistancias = AsyncFunction(async function (req, resp, next) {
   const documentFind = await DB_tour.aggregate(consulta);
 
   resp.status(200).json({
-    status: 'sucess ToursDistancia',
+    status: 'success ToursDistancia',
     data: {
       documentFind,
     },

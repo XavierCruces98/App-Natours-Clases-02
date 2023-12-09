@@ -10,6 +10,7 @@ head
   //- el CSS debe de ir despues, para reemplazar al css de mapbox de arriba
   link(rel="stylesheet", href="./../css/estilos.css")
   link(rel="shortcut icon", type="image/png", href="/imagenes/favicon.png")
-  //-  script(type="module", defer, src="./../js/home.js") // tira error
-  script(type="module" defer src="./../js/home.js")  
+  //-  script(type="commonjs", defer, src="./../js/home.js") // permite el "require()" pero no el IMPORT
+  //-  script(type="module", defer, src="./../js/home.js") // permite el "IMPORT" pero no el require()
+  script(type="module" defer src="./../js/home.js")   
   title #{titulo}

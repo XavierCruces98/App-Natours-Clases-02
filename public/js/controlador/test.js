@@ -8,7 +8,7 @@ miLogin.addEventListener('click', async function (e) {
   //test4321
   const respLogin = await getLogin();
 
-  if (respLogin.status === 'sucess POST login') {
+  if (respLogin.status === 'success POST login') {
     //window.location.replace('/api/v1/tours');
     window.location.replace('/ver-perfil');
     window.localStorage.setItem('respLogin', JSON.stringify(respLogin));

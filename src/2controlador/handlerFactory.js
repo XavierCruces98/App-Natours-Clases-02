@@ -29,7 +29,7 @@ exports.getAllElements = function (database) {
     // const resultado = await Query.getBusqueda().explain() // ver estadisticas de consulta
 
     resp.status(201).json({
-      status: 'sucess getAll',
+      status: 'success getAll',
       results: resultado.length,
       data: {
         resultado,
@@ -48,7 +48,7 @@ exports.postElemento = function (database) {
     // nota: Recuerda que aqui no tenemos un ID, estamos creando un nuevo documento nuevo, por ende no hay un controllerID
 
     resp.status(201).json({
-      status: 'sucess Post',
+      status: 'success Post',
       data: {
         results: document.length,
         document,
@@ -63,7 +63,7 @@ exports.deleteMany = function (database) {
     const documentDelete = await database.deleteMany({ nombre: { $ne: null } }); // SI borra todo
 
     resp.status(201).json({
-      status: 'sucess deleteAll',
+      status: 'success deleteAll',
       data: {
         // results: document.length, // AQUI SALE ERROR SI PONES ESTO
         documentDelete,
@@ -88,7 +88,7 @@ exports.getElementoId = function (database) {
     }
 
     resp.status(200).json({
-      status: 'sucess getId',
+      status: 'success getId',
       data: {
         documentFind,
       },
@@ -136,7 +136,7 @@ exports.patchElementoId = function (database) {
     //   => entonces, al momento de actualizar los datos, debemos asegurarnos que se respete solo colocar esa lista-de-valores
 
     resp.status(201).json({
-      status: 'sucess patchId',
+      status: 'success patchId',
       data: {
         documentUpdate,
       },
@@ -156,7 +156,7 @@ exports.deleteElementoId = function (database) {
     }
 
     resp.status(201).json({
-      status: 'sucess deleteId',
+      status: 'success deleteId',
       data: {
         documentDelete,
       },

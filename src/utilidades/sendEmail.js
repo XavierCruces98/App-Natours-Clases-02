@@ -1,6 +1,6 @@
 // node "src/1utilidades/sendEmailTest.js"
 const nodemailer = require('nodemailer'); // SI es un NPM
-//process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; // esto es importante, porque sino , no te permitira enviar nada
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; // esto es importante, porque sino , no te permitira enviar nada y ademas que da error al SIGNUP
 
 const sendEmail = async function (options) {
   const transporte = nodemailer.createTransport({

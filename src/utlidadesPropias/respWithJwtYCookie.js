@@ -9,7 +9,7 @@ const crearJwt = function (miId) {
   return jwt.sign(campos, secret, expira);
 };
 
-const crearCookie = function (resp, usuario) {
+const crearJwtYCookie = function (resp, usuario) {
   // 💻 0.0 aqui simplemente estamos ocultando la vista de respuesta en el postman
   // 💻 0.0 no estamos asignandole un valor, para ello tendriamos que poner ---await usuario.save()---
   usuario.password = undefined;
@@ -42,12 +42,12 @@ const crearCookie = function (resp, usuario) {
   return tokenJWT;
 };
 
-exports.respuestaWithJWT = function (resp, usuario, datos) {
+exports.respWithJwtYCookie = function (resp, usuario, datos) {
   //resp.status(201).json({ ...datos, ...data });
-  const tokenJWT = crearCookie(resp, usuario);
+  const tokenJWT = crearJwtYCookie(resp, usuario);
   resp.status(201).json({ ...datos, tokenJWT });
 };
 
 exports.setCookie = function (resp, usuario) {
-  crearCookie(resp, usuario);
+  crearJwtYCookie(resp, usuario);
 };

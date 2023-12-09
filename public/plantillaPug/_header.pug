@@ -11,11 +11,11 @@ header.cabezera
       img.navegador--elemento#home(src="/imagenes/logo-white.png", alt="aplicacion logo")
 
   nav.navegador.navegador--usuarios
-    - if (usuario)
+    - if (usuarioLocal)
       a.navegador--elemento#btn-logout(href="/home") Log out
       a.navegador--elemento(href="/me")
-        img.navegador--usuario-imagen(src=`/imagenes/usuarios/${usuario.photo}`, alt=`foto de ${usuario.nombre}`)
-        span= `${usuario.nombre}`
-    - if (!usuario)
+        img.navegador--usuario-imagen(src=`/imagenes/usuarios/${usuarioLocal.photo}`, alt=`foto de ${usuarioLocal.nombre}`)
+        span= `${usuarioLocal.nombre}`
+    - if (!usuarioLocal)
       a.navegador--elemento#btn-login(href="/login") Login
       a.navegador--elemento.navegador--elemento-cuenta#btn-signup(href="/signup") Sign up
