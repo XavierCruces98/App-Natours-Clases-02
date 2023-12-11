@@ -12,6 +12,8 @@ const crearJwt = function (miId) {
 const crearJwtYCookie = function (resp, usuario) {
   // 💻 0.0 aqui simplemente estamos ocultando la vista de respuesta en el postman
   // 💻 0.0 no estamos asignandole un valor, para ello tendriamos que poner ---await usuario.save()---
+
+  console.log({ usuario: usuario });
   usuario.password = undefined;
   const offset = new Date().getTimezoneOffset() * 1 * 60 * 1000;
   const expiraCookie = process.env.JWT_COOKIE_EXPIRA_EN * 60 * 60 * 24 * 90; // 1000ms/s*60s/min*60min/hr*24hr/90d === 90dias
@@ -42,9 +44,9 @@ const crearJwtYCookie = function (resp, usuario) {
   return tokenJWT;
 };
 
-exports.respWithJwtYCookie = function (resp, usuario, datos) {
+exports.respWithJwtYCookie = function (resp, datos) {
   //resp.status(201).json({ ...datos, ...data });
-  const tokenJWT = crearJwtYCookie(resp, usuario);
+  const tokenJWT = crearJwtYCookie(resp, datos.usuario);
   resp.status(201).json({ ...datos, tokenJWT });
 };
 

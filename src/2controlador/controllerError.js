@@ -1,39 +1,85 @@
 const cloneDeep = require('lodash.clonedeep');
 const ErrorClass = require('./../utilidades/ErrorClass');
 
-const enviarProduction = function (err, resp) {
+// TODO ERROR con ---ErroClass-- ó ERRORES imprevisto
+// A) Si es solamente atravez de bodypostam (---.startswith('/api)---) solo lanzamos un mensaje de error
+// B) Si estamos en nuestro "localhost/3000/home/etc" entonces, automaticamente va a renderizar --error.pug--
+// es como si fuera MAGIA
+
+const enviarProduction = function (err, req, resp) {
+  console.log({ url: req.url });
+
+  // A) Para enviar errores a la api (requerimientos usando "fecth" o "postman")
+  if (req.url.startsWith('/api')) {
+    // A1) Si es un "errorOperacional" es problema del CLIENTE, que ha ingresado algo mal
+    // A1) Si es "OPERACIONAL" mandamos el "errorMensaje+errorStatus"
+    if (err.isOperational) {
+      return resp.status(err.statusCode).json({
+        middleware: 'middleware error General - TRUE OPERATIONAL',
+        status: err.status,
+        message: err.message,
+      });
+    }
+
+    // A2) si no es un errorOperacional, entonces es un ERROR DESCONOCIDO
+    if (!err.isOperational) {
+      // A2) A pesar que es produccion, vamos a enviarlo a la console porque es un error desconocido
+      // A2)todo error que no pase por un "ErrorClass" es un error desconcido
+      console.error('💥💥 Something went very Wrong - ERROR 💥💥');
+      console.log(err);
+
+      // A2) Si es un ERROR desconocido enviamos un MENSAJE-GENERICO (tanto para dev y prod)
+      // A2) Si NO es "OPERACIONAL" mandamos el "errorMensaje GENERICO"
+      return resp.status(err.statusCode).json({
+        status: `(PROD) Algo salio muy mal ❗ ${err.status} false OPERATIONAL`,
+        message: 'Intente más tarde ', // Algo salió muy mal
+      });
+    }
+  }
+
+  // B) Para renderizar ERRORES EN LA PAGINA WEB
+  // B1) Aparece cuando ingreses una URL incorrecto (PROD) http://localhost:8000/qwewqe (cambia el puerto)
+  // B1) Si es "OPERACIONAL" mandamos el "errorMensaje+errorStatus"
   if (err.isOperational) {
-    resp.status(err.statusCode).json({
-      middleware: 'middleware error General - TRUE OPERATIONAL',
-      status: err.status,
-      message: err.message, // aqui cambios el mensaje
+    return resp.status(err.statusCode).render('error', {
+      tituloDinamico: `(PROD) Algo salio muy mal ❗ ${err.status} TRUE OPERATIONAL`,
+      errorMensaje: err.message,
     });
   }
 
+  // B2) Si es un ERROR desconocido enviamos un MENSAJE-GENERICO (errorMensaje)(tanto para dev y prod)
+  // B2) Si NO es "OPERACIONAL" mandamos el "errorMensaje GENERICO"
   if (!err.isOperational) {
-    // en este caso, a pesar que es produccion, vamos a enviarlo a la console como un error, porque es un error desconocido
-    // todo error que no pase por un "ErrorClass" es un error desconcido
-    console.error('💥💥 Something went very Wrong - ERROR 💥💥');
-    console.log(err);
-
-    resp.status(err.statusCode).json({
-      middleware: 'middleware error General - FALSE OPERATIONAL',
-      status: err.status,
-      message: 'Produccion - Something went very Wrong', // Algo salió muy mal
+    return resp.status(err.statusCode).render('error', {
+      tituloDinamico: `(PROD) Algo salio muy mal ❗ ${err.status} false OPERATIONAL`,
+      errorMensaje: 'Intente más tarde ',
     });
   }
 };
 
-const enviarDeveloper = function (err, resp) {
-  const operational = err.isOperational || false;
-  resp.status(err.statusCode).json({
-    middleware: 'middleware error General',
-    code: err.statusCode,
-    message: err.message,
-    name: err.name,
-    stack: err.stack,
-    error: err,
-    operational: operational,
+const enviarDeveloper = function (err, req, resp) {
+  // A) Para enviar errores a la api (requerimientos usando "fecth" o "postman")
+  if (req.url.startsWith('/api')) {
+    // console.log({ errorMensaje: err.message });
+
+    const operational = err.isOperational || false;
+    return resp.status(err.statusCode).json({
+      middleware: 'middleware error General - TRUE OPERATIONAL',
+      code: err.statusCode,
+      message: err.message,
+      name: err.name,
+      stack: err.stack,
+      error: err,
+      operational: operational,
+    });
+  }
+
+  // B) Para renderizar ERRORES EN LA PAGINA WEB
+  // esto aparece cuando ingreses una URL incorrecto (DEV) http://localhost:3000/qwewqe
+  // renderizar "error.ejs" ó "error.pug"
+  return resp.status(err.statusCode).render('error', {
+    tituloDinamico: `(dev) Algo salio mal 😥 ${err.status} false OPERATIONAL`, // va directo a pug
+    errorMensaje: err.message, // va directo a pug
   });
 };
 
@@ -98,12 +144,12 @@ module.exports = (err, req, resp, next) => {
 
     // NO: si NO sucede alguna de las condicionales, ErroClass === copia (ERROR)
     // SI: si SI sucede alguna de las condicionales, ErroClass === return new ErroClass
-    enviarProduction(errorClass, resp);
+    enviarProduction(errorClass, req, resp);
   }
 
   // 🟣 002 DESARROLLADOR: SI hay que informarle todo (err, err.name, err.code, etc)
   if (process.env.NODE_ENV === 'development') {
-    enviarDeveloper(err, resp);
+    enviarDeveloper(err, req, resp);
   }
 
   // nuestra pila STACK, para que nos indique en que linea de codigo sucedio el error

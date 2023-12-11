@@ -28,15 +28,15 @@ routerReview
   .route('/:id') //
   //  ---- automaticamente MERGE ira aqui, porque es :: [GET] api/v1/reviews/:id  <=> [GET] api/v1/tours/:id/reviews/:id (Review)
   .get(
-    controlReview.getReviewId // para mi las review deben de ser publicas (sin permisoJWT)
+    controlReview.getReviewId // para mi las review deben de ser publicas (sin validarJwtCookie)
   )
   .patch(
-    controllerAuth.permisoJWT, //
+    controllerAuth.validarJwtCookie, //
     controllerAuth.restringidoTo('user-basico'),
     controlReview.patchReviewId
   )
   .delete(
-    controllerAuth.permisoJWT, //
+    controllerAuth.validarJwtCookie, //
     controllerAuth.restringidoTo('user-basico'),
     controlReview.deleteReviewId
   );
@@ -45,18 +45,18 @@ routerReview
   .route('/') // NO TIENE PARAMETROS
   //  ---- automaticamente MERGE ira aqui, porque es :: [GET] api/v1/reviews  <=> [GET] api/v1/tours/:id/reviews
   .get(
-    controlReview.reviewQuery, // para mi las review deben de ser publicas (sin permisoJWT)
+    controlReview.reviewQuery, // para mi las review deben de ser publicas (sin validarJwtCookie)
     controlReview.consultaAllDocuments
   )
   //  ---- automaticamente MERGE ira aqui, porque es :: [POST] api/v1/reviews <=> [POST] api/v1/tours/:id/reviews
   .post(
-    controllerAuth.permisoJWT,
+    controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('user-basico'),
     controlReview.reviewCreate,
     controlReview.crearReview
   )
   .delete(
-    controllerAuth.permisoJWT, //
+    controllerAuth.validarJwtCookie, //
     controllerAuth.restringidoTo('user-basico'),
     controlReview.deleteMany
   );

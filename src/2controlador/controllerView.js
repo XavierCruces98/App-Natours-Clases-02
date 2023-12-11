@@ -1,7 +1,6 @@
-const DB_user = require('../1modelos/esquemaUser');
 const DB_tour = require('../1modelos/esquemaTour');
 const AsyncFunction = require('../utilidades/AsyncFunction');
-const { setCookie } = require('../utlidadesPropias/respWithJwtYCookie');
+
 
 //---------------------------------------------------
 exports.permisosHttps = AsyncFunction(async function (req, resp, next) {
@@ -36,18 +35,17 @@ exports.perfil = AsyncFunction(async function (req, resp, next) {
 });
 
 //------------------------------------------------------------------------
-// render(emailEnviado.ejs)
+// nota
+// 1) Aver papito, aqui la estabamos malogrando bien feo
+// 2) recuerda que una API, NO debe acordarse de solicitudes anteriores, sino que todo lo debe de hacer en una sola pasadda
+// 3) Aqui estabamos primero::: usando "localhost:3000/api/v1/signup" => y esto termina en "emailEnviado"
+// 4) entonces si ya hemos acabado, esto de aqui no deberia de acordar se solicitudes anteriores, para verificar si el "Email" FUE ENVIADO O NO
+
+// // render(emailEnviado.ejs)
 exports.emailEnviado = AsyncFunction(async function (req, resp, next) {
+  // ControllerAuthentication.validarJwtCookie ==> nos devuelve ---resp.locals.usuarioLocal---
+  // dentro de la plantilla de ""emailEnviado.pug"" tenemos los mensajes
   resp.status(200).render('emailEnviado');
-});
-
-// render(/emailConfirmado.ejs)
-exports.emailConfirmado = AsyncFunction(async function (req, resp, next) {
-  // 1) si Existe ---resp.locals.usuarioLocal--- creamos el JWT y el SIGNUP
-  if (resp.locals.usuarioLocal) setCookie(resp, resp.locals.usuarioLocal);
-  resp.status(200).render('emailConfirmado');
-
-  
 });
 
 // render(signUp.ejs)

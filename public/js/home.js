@@ -1,24 +1,27 @@
 // const api = require('./controlador/api.js');
 import * as api from './controlador/api.js';
-import { mostrarAlerta } from './controlador/alerta.js';
+import { crearMapaBox } from './crearMapaBox.js';
 
 const botonLogout = document.querySelector('#btn-logout');
+const mapa = document.querySelector('#mapa');
+const menuUsuario = document.querySelector('.usuario-vista');
 
-if (window.location.pathname.includes('confirmarEmail')) {
-  window.setTimeout(function () {
-    window.location.replace('/home');
-  }, 1500);
-}
+if (menuUsuario) formUpdate();
+// if (window.location.pathname.includes('confirmarEmail')) {
+//   window.setTimeout(function () {
+//     window.location.replace('/home');
+//   }, 2000); //2segundos
+// }
 
 if (window.location.pathname === '/login') await formLogin();
 if (window.location.pathname === '/signup') await formSignup();
 if (botonLogout) await btnLogout();
+if (mapa)  crearMapaBox(mapa);
 
 async function btnLogout() {
   botonLogout.addEventListener('click', async function (e) {
     e.preventDefault();
     await api.logout();
-    console.log(`salir`);
   });
 }
 
@@ -38,7 +41,7 @@ async function formLogin() {
       return;
     }
 
-    console.log(` FORMULARIO LOGIN`, { email, password });
+    console.log(`FORMULARIO LOGIN`, { email, password });
     await api.login(email, password);
   });
 }
@@ -61,12 +64,7 @@ async function formSignup() {
 
     if (!regexNombre.test(nombre) || password === '') return;
 
-    if (password !== passwordConfirm) {
-      mostrarAlerta('error', 'Los Password nos coinciden ❗');
-      return; // El return es importante para que no continue
-    }
-
-    console.log(` FORMULARIO SIGNUP`, {
+    console.log(`FORMULARIO SIGNUP`, {
       nombre,
       email,
       password,
@@ -78,3 +76,23 @@ async function formSignup() {
 }
 
 //---------------------------------------------------------------------------
+async function formUpdate() {
+  document
+    .querySelector('#cambiarNombreEmail')
+    .addEventListener('submit', function (e) {
+      e.preventDefault();
+    });
+
+  document
+    .querySelector('#cambiarPassword')
+    .addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const passActual = document.querySelector('#password-actual').value;
+      const passNew = document.querySelector('#password-nuevo').value;
+      const passConfirm = document.querySelector('#password-confirm').value;
+
+      console.log({ passActual, passNew, passConfirm });
+
+      await api.updatePassword(passActual, passNew, passConfirm);
+    });
+}

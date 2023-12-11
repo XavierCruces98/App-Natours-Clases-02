@@ -46,6 +46,15 @@ body {
   flex: 1;
   position: relative;
 }
+
+.main--error {
+  background-color: #f7f7f7;
+  padding: 10rem;
+
+  flex: 1;
+  position: relative;
+}
+
 /* 
 .flex {
   display: -webkit-box;

@@ -19,7 +19,7 @@ const routerReview = require('./routerReview');
  * */
 
 // nota para encadenar varias callback en get(),post(),delete(), los metodos de "controlTours" deben tener el --next--
-// nota Es necesario colocar en "permisoJWT" en cada metodo, sino no lo colocas, podra hacer GET/POST/DELETE sin el JWT
+// nota Es necesario colocar en "validarJwtCookie" en cada metodo, sino no lo colocas, podra hacer GET/POST/DELETE sin el JWT
 
 routerTour
   .route('/tours-cercanos/:distancia/center/:latitudLongitud/unidad/:unit')
@@ -43,19 +43,19 @@ routerTour
 routerTour
   .route('/top-5-tours-baratos-bestCalificados') // ruta especial
   .get(
-    controllerAuth.permisoJWT, // Informacion libre
+    controllerAuth.validarJwtCookie, // Informacion libre
     controlTours.tourTop5,
     controlTours.consultaAllDocuments
   ); // podemos anidar varios --middleware--
 
 routerTour
   .route('/agrupamiento') //
-  .get(controllerAuth.permisoJWT, controlTours.getAgrupamiento);
+  .get(controllerAuth.validarJwtCookie, controlTours.getAgrupamiento);
 
 routerTour
   .route('/plan-mensual/:miAno') //
   .get(
-    controllerAuth.permisoJWT, //
+    controllerAuth.validarJwtCookie, //
     controllerAuth.restringidoTo('admin', 'lider-guia', 'guia'), // estadisticas internas de la APP
     controlTours.getAgrupamientoAno
   );
@@ -66,7 +66,7 @@ routerTour
 
 routerTour
   .route('/:id/reviews/:idReview') //
-  .get(controllerAuth.permisoJWT, controlTours.getIdTourIdReview);
+  .get(controllerAuth.validarJwtCookie, controlTours.getIdTourIdReview);
 
 routerTour.use('/:id/reviews', routerReview);
 
@@ -85,14 +85,14 @@ routerTour.use('/:id/reviews', routerReview);
 routerTour
   .route('/:id/reviews') //
   .post(
-    controllerAuth.permisoJWT,
+    controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('user-basico'),
     controlReview.crearReview
   );
 
 routerTour
   .route('/:id/reviews') //
-  .get(controllerAuth.permisoJWT, controlTours.getIdTourReviews);
+  .get(controllerAuth.validarJwtCookie, controlTours.getIdTourReviews);
 */
 
 //-----------------------------------------------
@@ -100,16 +100,16 @@ routerTour
 routerTour
   .route('/:id') // SI TIENE PARAMETROS "/:id"
   .get(
-    // controllerAuth.permisoJWT, // nuestra API, permite ver TOUR a cualquier persona (usuario o no usuario)
+    // controllerAuth.validarJwtCookie, // nuestra API, permite ver TOUR a cualquier persona (usuario o no usuario)
     controlTours.getTourId
   )
   .patch(
-    controllerAuth.permisoJWT,
+    controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('admin', 'lider-guia', 'guia'), // los users-bascios, no puede modificar un tour
     controlTours.patchTourId
   )
   .delete(
-    controllerAuth.permisoJWT,
+    controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('admin', 'lider-guia'), // un admion ó lider-guia, puede borrar un ID
     controlTours.deleteTourId
   );
@@ -123,16 +123,16 @@ routerTour
 routerTour
   .route('/') // NO TIENE PARAMETROS
   .get(
-    // controllerAuth.permisoJWT, // nuestra API, permite ver TOUR a cualquier persona (usuario o no usuario)
+    // controllerAuth.validarJwtCookie, // nuestra API, permite ver TOUR a cualquier persona (usuario o no usuario)
     controlTours.consultaAllDocuments
   )
   .post(
-    controllerAuth.permisoJWT,
+    controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('admin', 'lider-guia', 'guia'), // los usuarios-basicos, no pueden crear nuevos tours
     controlTours.postTour
   )
   .delete(
-    controllerAuth.permisoJWT,
+    controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('admin'), // solo el "admin" puede borrar toda la base-de-datos
     controlTours.deleteMany
   );

@@ -5,7 +5,9 @@ const DB_user = require('../1modelos/esquemaUser');
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 
-const { respWithJwtYCookie } = require('../utlidadesPropias/respWithJwtYCookie');
+const {
+  respWithJwtYCookie,
+} = require('../utlidadesPropias/respWithJwtYCookie');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 const handlerFactory = require('./handlerFactory');
 
@@ -53,9 +55,9 @@ exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   );
 
   // 💻 4.1 respuesta
-  respWithJwtYCookie(resp, documentUpdate, {
+  respWithJwtYCookie(resp, {
     status: 'success updatePerfil',
-    documentUpdate,
+    usuario: documentUpdate,
   });
 });
 

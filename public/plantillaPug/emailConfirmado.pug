@@ -27,8 +27,12 @@ html(lang="en")
         - if (usuarioLocal?.emailConfirm)
           h2.titulo-secundario.quick-facts Tu Email ha sido verificado !
           p.formulario--label(for="nombre") Ya puedes explorar nuestra aplicación 😊
-        - else
-          h2.titulo-secundario.quick-facts Ha sucedido un error :(
-          p.formulario--label(for="nombre") Intente de nuevo
-
+        - if (!usuarioLocal?.emailConfirm)
+          h2.titulo-secundario.quick-facts Ya hemos enviado un email!
+          p.formulario--label(for="nombre")= `Ya hemos enviado un correo a su email personal ${email}`
+          br
+          | Si aun no le llega, ingrese al siguiente link 
+          a(href="http://localhost:3000/confirmarTuEmail" target="_blank") aqui
+          |  para enviar de nuevo otro email 😊
+     
     include ./_footer.pug

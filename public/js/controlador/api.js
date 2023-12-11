@@ -8,7 +8,10 @@ export const logout = async function () {
     // 1) haces una REQUEST con axios() a una API' http://localhost:3000/api/v1/users/logout',
     // 2) Y recibiras una respuesta RESPONSE
     const response = await axios({
-      method: 'POST',
+      method: 'GET',
+      // EN PRODUCION el puerto "'http://localhost:3000" ya no funciona, (obivamente porque estas en prod)
+      // para cuando uses ---npm run start:prod---
+      // url: 'http://localhost:8000/api/v1/users/login',
       url: 'http://localhost:3000/api/v1/users/logout',
     });
 
@@ -21,7 +24,7 @@ export const logout = async function () {
       }, 1000); // 1.0 segundos
     }
   } catch (error) {
-    mostrarAlerta('error', 'Ha sucedido un error 😥');
+    mostrarAlerta('error', error.response.data.message);
     console.log(error);
   }
 };
@@ -30,6 +33,8 @@ export const login = async function (email, password) {
   try {
     const response = await axios({
       method: 'POST',
+      // para cuando uses ---npm run start:prod---
+      // url: 'http://localhost:8000/api/v1/users/login',
       url: 'http://localhost:3000/api/v1/users/login',
       data: { email, password },
     });
@@ -46,11 +51,7 @@ export const login = async function (email, password) {
     console.log(error.response.data.message);
 
     // 3) Lo malo de esto, es que si pasa 10min despues del correo, entonces estas frito, saldra "email o password incorrecto"
-    if (error.response.data.message === '4.0 No ha confirmado su EMAIL') {
-      mostrarAlerta('error', 'No ha confirmado su EMAIL ❗');
-    } else {
-      mostrarAlerta('error', 'Email o password Incorrecto');
-    }
+    mostrarAlerta('error', error.response.data.message);
   }
 };
 
@@ -63,6 +64,8 @@ export const signup = async function (
   try {
     const response = await axios({
       method: 'POST',
+      // para cuando uses ---npm run start:prod---
+      // url: 'http://localhost:8000/api/v1/users/login',
       url: 'http://localhost:3000/api/v1/users/signup',
       data: { nombre, email, password, passwordConfirm },
     });
@@ -71,12 +74,40 @@ export const signup = async function (
 
     if (response.data.status === 'Success Signup') {
       mostrarAlerta('success', 'Signup Exitoso ❗');
+      
       window.setTimeout(() => {
         window.location.replace('/emailEnviado');
-      }, 1500); // 1.5 segundos
+      }, 2000); // 2 segundos
     }
   } catch (error) {
-    mostrarAlerta('error', 'Ha sucedido un error 😥 ❗');
+    mostrarAlerta('error', error.response.data.message);
+    console.log(error);
+  }
+};
+
+export const passwordUpdate = async function (
+  passwordActual,
+  passwordNuevo,
+  passwordNuevoConfirm
+) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      // para cuando uses ---npm run start:prod---
+      // url: 'http://localhost:8000/api/v1/users/login',
+      url: 'http://localhost:3000/api/v1/users/updateMyPassword',
+      // en nuestra LOGICA, el nombre de los valores son: passwordActual,passwordNuevo,passwordNuevoConfirm
+      // si le cambias el nombre de estas variables dara ERROR
+      data: { passwordActual, passwordNuevo, passwordNuevoConfirm },
+    });
+
+    console.log(response.data);
+
+    if (response.data.status === 'Success UpdatePassword') {
+      mostrarAlerta('success', 'Password UPDATE Exitoso ❗');
+    }
+  } catch (error) {
+    mostrarAlerta('error', error.response.data.message);
     console.log(error);
   }
 };

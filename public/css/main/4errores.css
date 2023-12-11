@@ -1,11 +1,12 @@
 .error {
   position: absolute;
-  top: 35%;
+  top: 60%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   max-width: 80rem;
   text-align: center;
+
 }
 .error--titulo {
   display: -webkit-box;

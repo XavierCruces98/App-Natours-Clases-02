@@ -44,7 +44,7 @@ html(lang="en")
             //- form(action="/submit-user-typeusuadata", method="POST")
 
             //- WITH API
-            form(action="")
+            form(action="")#cambiarNombreEmail
               .formulario--grupo
                 label.formulario--label(for="nombre") Nombre
                 input#nombre.formulario--input(type="text", required, name="nombre")
@@ -65,7 +65,7 @@ html(lang="en")
           .usuario-vista--formulario-contenido
             h2.titulo-secundario.quick-facts Cambiar password
 
-            form(action="")
+            form(action="")#cambiarPassword
               .formulario--grupo
                 label.formulario--label(for="password-actual") Actual password
                 input#password-actual.formulario--input(type="password", placeholder="Ingresar su password actual", required)

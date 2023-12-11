@@ -3,7 +3,7 @@ const express = require('express');
 const controlUsers = require(`../2controlador/controllerUsers`);
 const routerUser = express.Router();
 const controllerAuth = require('../2controlador/controllerAuthentication');
-// nota Es necesario colocar en "permisoJWT" en cada metodo, sino no lo colocas, podra hacer GET/POST/DELETE sin el JWT
+// nota Es necesario colocar en "validarJwtCookie(false)" en cada metodo, sino no lo colocas, podra hacer GET/POST/DELETE sin el JWT
 
 //----------------------- 1.0 Sin necesidad de iniciar sesion ---------------------------
 //----------------------- 1.1 Creacion e Inicio de SESION
@@ -12,8 +12,8 @@ routerUser
   .post(controllerAuth.signup, controllerAuth.sendEmailSignUp);
 
 routerUser
-  .route('/confirmarEmail/:stringRandom') // aqui un usuario normal crea una cuenta. pero solo una cuenta a la vez.
-  .get(controllerAuth.verificarEmailConString(), controllerAuth.respuestaEmail);
+  .route('/confirmarEmail/:stringRandom') // Usuario normal crea una cuenta. pero solo una cuenta a la vez.
+  .get(controllerAuth.verificarEmailConString);
 
 routerUser
   .route('/login') //
@@ -21,7 +21,7 @@ routerUser
 
 routerUser
   .route('/logout') //
-  .post(controllerAuth.logout);
+  .get(controllerAuth.logout); // esto es GET porque no estamos enviando ningun dato
 
 //----------------------- 1.2 confirmar EMAIL o renovar PASSOWRD
 routerUser
@@ -38,10 +38,10 @@ routerUser
 
 //--------------------------------------------------------------
 
-routerUser.use(controllerAuth.permisoJWT);
+routerUser.use(controllerAuth.validarJwtCookie);
 // 2.0 Inicio de sesion OBLIGATORIO
-// 2.1 todos los --middleware-- de abajo tendran como primer --middleware-- a [controllerAuth.permisoJWT]
-// 2.2 [controllerAuth.permisoJWT] verifica el JWT del LOGIN
+// 2.1 todos los --middleware-- de abajo tendran como primer --middleware-- a [controllerAuth.validarJwtCookie(false)]
+// 2.2 [controllerAuth.validarJwtCookie(false)] verifica el JWT del LOGIN
 
 routerUser.route('/me').get(
   controlUsers.getMe,

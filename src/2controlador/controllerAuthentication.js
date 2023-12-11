@@ -6,7 +6,11 @@ const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 const sendEmailString = require('../utilidades/sendEmailString');
 const localTime = require('../utlidadesPropias/localTime');
-const { respWithJwtYCookie } = require('../utlidadesPropias/respWithJwtYCookie');
+const {
+  respWithJwtYCookie,
+  setCookie,
+} = require('../utlidadesPropias/respWithJwtYCookie');
+
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 
 exports.signup = AsyncFunction(async function (req, resp, next) {
@@ -30,6 +34,7 @@ exports.signup = AsyncFunction(async function (req, resp, next) {
 
   // 💻 3.0 enviando usuario al siguiente middleware
   req.usuarioActual = nuevoUsuario;
+
   next();
 
   // "POST" si los valores NO cumplen con las restricciones del  "ESQUEMA USER" / "ESQUEMA TOUR", no podras crear user/tour
@@ -40,11 +45,10 @@ exports.signup = AsyncFunction(async function (req, resp, next) {
 exports.sendEmailSignUp = AsyncFunction(async function (req, resp, next) {
   const miEmail = req.usuarioActual?.email || req.body.email;
 
+  console.log({ email: miEmail });
+
   const datos = {
-    esquema: DB_user,
     email: miEmail,
-    resetToken: 'emailResetToken',
-    resetTime: 'emailTimeReset',
     subject: 'Verificar tu EMAIL (valido 10min)',
     text: `Porfavor confirma tu EMAIL con el siguiente URL.`,
     status: 'Success Signup',
@@ -55,68 +59,70 @@ exports.sendEmailSignUp = AsyncFunction(async function (req, resp, next) {
   sendEmailString(datos, req, resp, next);
 });
 
-exports.verificarEmailConString = function (renderizar = false) {
-  return AsyncFunction(async function (req, resp, next) {
-    // 💻 1.0 Aqui esta el truco,
-    // 💻 1.0 SOLO si estamos en "renderizar" + Y existe "usuarioLocal"
-    // 💻 1.0 solo en ese caso omitimos la logica de verificarEMAIL
-    if (renderizar && resp.locals.usuarioLocal) {
-      next();
-    }
+exports.verificarEmailConString = AsyncFunction(async function (
+  req,
+  resp,
+  next
+) {
+  // 💻 1.0 Aqui esta el truco,
+  // 💻 1.0 SOLO si estamos en "renderizar" + Y existe "usuarioLocal.confirmacionEmail === TRUE"
+  // 💻 1.0 solo en ese caso omitimos la logica de verificarEMAIL
+  if (!req.url.startsWith('/api') && resp.locals.usuarioLocal?.emailConfirm) {
+    resp.status(200).render('emailConfirmado');
+  }
 
-    // 💻 1.0 creando un Token
-    const randomToken = crypto
-      .createHash('sha256')
-      .update(req.params.stringRandom) // revisar "routerUser"
-      .digest('hex');
-    const vlocalTime = localTime();
+  // 💻 1.0 creando un Token
+  const randomToken = crypto
+    .createHash('sha256')
+    .update(req.params.stringRandom) // revisar "routerUser"
+    .digest('hex');
+  const vlocalTime = localTime();
 
-    // 💻 2.0 buscando usuario
-    const validarUsuario = await DB_user.findOne({
-      emailResetToken: randomToken,
-      emailTimeReset: { $gte: vlocalTime },
-    }).select('+emailConfirm');
+  // 💻 2.0 buscando usuario
+  const validarUsuario = await DB_user.findOne({
+    emailResetToken: randomToken,
+    emailTimeReset: { $gte: vlocalTime },
+  }).select('+emailConfirm');
 
-    if (!validarUsuario && !renderizar) {
-      return next(
-        new ErrorClass(
-          'El token-email es invalido ó El token-email expiro',
-          400
-        )
-      );
-    }
+  // 1) Si ---validarUsuario--- NO EXISTE , provacamos un error y se RENDERIZARA EL "ERROR"
+  // 1) GRACIAS a que "controllerError" hemos puesto ---.startWith("/api")---
+  // 1) Cuando ejecutamos cuaqluier ruta de nuestra pagina (.pug) y sucede un error "ErrorClass"
+  // 1) Si nuestra aplicacion es ---.startWith("/api")--- (POSTMAN) entonces veremos un mensaje de error
+  // 1) Si nuestra aplicacion es ---sPaginas RENDERIZADAS--- => Va a renderizar el ---error.pug---
 
-    if (!validarUsuario && renderizar) {
-      return next();
-    }
+  if (!validarUsuario) {
+    return next(
+      new ErrorClass('El token-email es invalido ó El token-email expiro', 400)
+    );
+  }
 
-    // 💻 3.0 restableciendo valores
-    validarUsuario.emailConfirm = true;
-    validarUsuario.emailResetToken = undefined;
-    validarUsuario.emailTimeReset = undefined;
-    await validarUsuario.save({ validateBeforeSave: false }); // esto es necesario para guardar sin ingresar campos obligatorios,
+  // 💻 3.0 restableciendo valores
+  validarUsuario.emailConfirm = true;
+  validarUsuario.emailResetToken = undefined;
+  validarUsuario.emailTimeReset = undefined;
+  await validarUsuario.save({ validateBeforeSave: false }); // esto es necesario para guardar sin ingresar campos obligatorios,
 
-    // 💻 4.0 creando JWT, obligatorio crear un nuevo JWT
-    const misDatos = {
-      status: 'Success Email Verificado!',
-      nombre: validarUsuario.nombre,
-    };
+  // 💻 4.0 creando JWT, obligatorio crear un nuevo JWT
+  // 1) Si RENDERIZAR==FALSE, y "validarUsuario" SI da error, damos ERRORCLASS()
+  // 1) Si RENDERIZAR==TRUE, y "validarUsuario" SI da error, damos NEXT()
 
-    // 1) Si RENDERIZAR==FALSE, y "validarUsuario" SI da error, damos ERRORCLASS()
-    // 1) Si RENDERIZAR==TRUE, y "validarUsuario" SI da error, damos NEXT()
+  // 1) Si RENDERIZAR==FALSE, y "validarUsuario" OK, creamos cookie + respuesta.json()
+  // 1) Si RENDERIZAR==TRUE, y "validarUsuario" OK, creamos cookie + respesta.render()
 
-    // 1) Si RENDERIZAR==FALSE, y "validarUsuario" OK, creamos cookie + respuesta.json()
-    // 1) Si RENDERIZAR==TRUE, y "validarUsuario" OK, creamos cookie + respesta.render()
+  // req.validarUsuario = validarUsuario;
+  resp.locals.usuarioLocal = validarUsuario;
+  const data = {
+    status: 'Success Email Verificado!',
+    usuario: validarUsuario,
+  };
 
-    // req.validarUsuario = validarUsuario;
-    resp.locals.usuarioLocal = validarUsuario;
-    req.misDatos = misDatos;
-    next();
-  });
-};
-
-exports.respuestaEmail = AsyncFunction(async function (req, resp, next) {
-  respWithJwtYCookie(resp, resp.locals.usuarioLocal, req.misDatos);
+  // 1.0 esto funciona porque este "middleware" lo estas poniendo dentro de --routerView--
+  if (!req.url.startsWith('/api')) {
+    setCookie(resp, validarUsuario);
+    resp.status(200).render('emailConfirmado');
+  } else {
+    respWithJwtYCookie(resp, data);
+  }
 });
 
 //----------------------------------------------------------------------------------------------------
@@ -154,7 +160,7 @@ exports.login = AsyncFunction(async function (req, resp, next) {
   );
   // 💻 2.0 no puedes indicar que si uno de los dos Email/password son correctos, porque le ayudas al hacker
   if (!validarUsuario || !validarPassword)
-    return next(new ErrorClass('2.0 Email ó Password incorrecto ', 401)); // 401 Error Unauthorized
+    return next(new ErrorClass('2.0 Email ó Password incorrecto', 401)); // 401 Error Unauthorized
 
   if (!validarUsuario?.active)
     return next(new ErrorClass('3.0 Su cuenta a sido desactivada', 401)); // 401 Error Unauthorized
@@ -165,25 +171,28 @@ exports.login = AsyncFunction(async function (req, resp, next) {
   // 💻 3.0 Crear token
   const data = {
     status: 'success POST login',
-    user: validarUsuario, // deberiamos poder crear 01 usuario como maximo.
+    usuario: validarUsuario, // deberiamos poder crear 01 usuario como maximo.
   };
-  respWithJwtYCookie(resp, validarUsuario, data);
+  respWithJwtYCookie(resp, data);
 });
 
 //🔵🔵003 validarJWT , antes de ingresar a cualquier ruta  ==> revisar (./ ./id, etc) routeruser.js
 //🔵🔵003 es decir, antes de ingresar a cualquier ruta, debes de crearte una cuenta ó iniciar sesion
-exports.permisoJWT = AsyncFunction(async function (req, resp, next) {
-  let token;
+exports.validarJwtCookie = AsyncFunction(async function (req, resp, next) {
   // 💻 01.0 estamos revisando si ha ingresado un token, que seria lo mismo que: ---no haya iniciado sesion--
+  let token;
+  // 💻 01.0 buscar TOKEN cuando iniciamos con BODYPOSTAMN ("/api")
   if (
+    api &&
     req.headers.authorization &&
     req.headers.authorization?.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
 
+  // 💻 01.0 buscar TOKEN cuando iniciamos con RENDERIZADO (localhost/3000/login)
   if (!token || token === 'null')
-    return next(new ErrorClass('1.0 No has iniciado sesion! ', 401));
+    return next(new ErrorClass('1.0 No has iniciado sesion!', 401));
 
   // 💻 02.0 revisar si el token es valido
   const validarJWT = jwt.verify(token, process.env.JWT_SECRETO);
@@ -194,11 +203,13 @@ exports.permisoJWT = AsyncFunction(async function (req, resp, next) {
     '+emailConfirm'
   ); //
 
-  if (!validarUsuario)
+  if (!validarUsuario) {
     return next(new ErrorClass('2.0 Su cuenta ha sido Eliminada', 401));
-
-  if (!validarUsuario.emailConfirm)
-    return next(new ErrorClass('3.0 No ha confirmado su email', 401));
+  }
+  // Si existe el USUARIO && RUTA="/emailEnviado" ==> nos vamos a controller.View
+  if (!validarUsuario.emailConfirm) {
+    return next(new ErrorClass('4.0 No ha confirmado su Email! ', 401));
+  }
 
   // 💻 4.0 revisar si el usuario a cambiado de contraseña despues que JWT fue enviado
   // 💻 4.0 TRUE= contraseña SI Cambiada, FALSE= contraseña NO cambiada
@@ -217,7 +228,7 @@ exports.permisoJWT = AsyncFunction(async function (req, resp, next) {
   // 💻 5.0 "req.user" es una propiedad que nos estamos inventando
   // 💻 5.1 es importante, porque a los siguientes --middleware--  le tendremos que pasar que "usuario" ha iniciado sesion
   req.usuarioActual = validarUsuario;
-
+  // resp.locals.usuarioLocal = validarUsuario; // respuesta
   next();
 });
 
@@ -284,14 +295,14 @@ exports.resetPassword = AsyncFunction(async function (req, resp, next) {
   // 💻 4.0 "validarJWT", es innecesario, aqui simplemente quiero obtener el "iat"
   const data = {
     status: 'Success resetPassword',
-    nombre: validarUsuario.nombre,
+    usuario: validarUsuario,
     passwordTimeReset: timeReset,
     horaActual: vlocalTime,
     passwordChange: validarUsuario.passwordChange,
     nuevoPassword: validarUsuario.password,
   };
 
-  respWithJwtYCookie(resp, validarUsuario, data);
+  respWithJwtYCookie(resp, data);
 });
 
 exports.updatePassword = AsyncFunction(async function (req, resp, next) {
@@ -322,27 +333,28 @@ exports.updatePassword = AsyncFunction(async function (req, resp, next) {
 
   const data = {
     status: 'Success UpdatePassword',
-    usuario: validarUsuario.nombre,
+    usuario: validarUsuario,
     passwordChange: validarUsuario.passwordChange,
   };
 
-  respWithJwtYCookie(resp, validarUsuario, data);
+  respWithJwtYCookie(resp, data);
 });
 
-//-------------------------------------------------------------------
-//----------------------------------------------------------------
-// Esto de aqui NO RETORNA ERRORES (--ErrorClass--)
-exports.verificarLogin = async function (req, resp, next) {
+exports.verificarLogin = AsyncFunction(async function (req, resp, next) {
+  // 💻 0.0 Renderizar
+  // 💻 0.0 Si la ruta es "/me" y no hay COOKIE req.cookies.miJwtCookie ==> Renderizamos ERROR
+  // 💻 0.0 Si la ruta es diferente ===> Continue la logica
+  // console.log({cookie: });
+  if (
+    !req.cookies.miJwtCookie &&
+    (req.url === '/me' || req.url === '/emailEnviado')
+  )
+    return next(new ErrorClass('No has iniciado Sesion', 401));
+
   // 1.0 Cuando hayas salido de seccion, el "miJwtCookie" ya no existira
   if (!req.cookies.miJwtCookie) return next();
 
   try {
-    // console.log({
-    //   cookieParser: req.cookies.miJwtCookie,
-    //   cookieHeader: req.headers.cookie,
-    //   usuario,
-    // });
-
     // 1) verificar TOKEN
     // nota necesitas de --require('cookie-parser')-- para --req.cookies--
     const token = jwt.verify(req.cookies.miJwtCookie, process.env.JWT_SECRETO);
@@ -361,6 +373,15 @@ exports.verificarLogin = async function (req, resp, next) {
 
     // 4) si no se ha confirmado "email" damos next() y "resp.locals.usuarioLocal NO existira"
     if (usuario.emailConfirm === false) {
+      // resp.locals.usuarioLocal = usuario; // si quitas esto estara como NO CONECTADO
+      // Como el "jwt y cookie" existen, entonces YA SE CREO LA CUENTA 
+      resp.locals.confirmacionEmail = false;
+      resp.locals.email = usuario.email;
+      if(req.url === "me") return next(new ErrorClass('Confirme su Email', 401));
+
+      // Solo en la ruta "me" ponemos "ERROR"
+      // en todas las demas rutas damos permiso PERO, aparecera como "no iniciado sesion"
+      // no podra iniciar sesion hasta que confirme su EMAIL
       return next();
     }
 
@@ -368,15 +389,18 @@ exports.verificarLogin = async function (req, resp, next) {
     // 4) si hay algun error arriba simplemente damos en --next()-- y "usuarioLocal no existira"
     // 4) si SI existe "usuarioLocal" los botones seran (logout & "perfil") y "/me" no dara error
     // 4) si NO existe "usuarioLocal" los botones seran (login & signup) y "/me" dara error
+
     resp.locals.usuarioLocal = usuario; // respuesta
 
     return next();
   } catch (error) {
     return next();
   }
-};
+});
 
 // http://localhost:3000/api/v1/users/logout
+// Aqui creamos una "cookie" con el mismo nombre "miJwtCookie"
+// y con el nombre clave "loggedout" eliminamos dicho cookie
 exports.logout = AsyncFunction(async function (req, resp, next) {
   const nombre = 'miJwtCookie';
   const offset = new Date().getTimezoneOffset() * 1 * 60 * 1000;

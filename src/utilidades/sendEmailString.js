@@ -1,11 +1,15 @@
 const ErrorClass = require('./ErrorClass');
 const sendEmail = require('./sendEmail');
+const {
+  respWithJwtYCookie,
+} = require('../utlidadesPropias/respWithJwtYCookie');
+const DB_user = require('../1modelos/esquemaUser');
 
 const sendEmailString = async function (datos, req, resp, next) {
   // 💻 1.0 comprobar si existe el usuario, segun email
   // 💻 1.0 El usuario olvido su contraseña, asi que le pedimos su email
   // 💻 1.0 email === usuario
-  const usuarioActual = await datos.esquema.findOne({ email: datos.email });
+  const usuarioActual = await DB_user.findOne({ email: datos.email });
   if (!usuarioActual)
     return next(new ErrorClass('Porfavor ingrese un email valido', 404)); // not found
 
@@ -16,8 +20,8 @@ const sendEmailString = async function (datos, req, resp, next) {
   // 💻2.0 y no PATCH, porque PATCH significa indicar un "ID" de usuario en la URL
   // 💻2.0 en la URL debemos poner el "randomString" y no el "randomToken"
   const randomString = await usuarioActual.crearRandomStringYToken(
-    datos.resetToken,
-    datos.resetTime
+    'emailResetToken',
+    'emailTimeReset'
   );
   await usuarioActual.save({ validateBeforeSave: false });
 
@@ -48,10 +52,16 @@ const sendEmailString = async function (datos, req, resp, next) {
       stringAutoGenerado: randomString,
       correoRemitente: correoRemitente,
       correoDestino: usuarioActual.email,
-      user: usuarioActual,
+      usuario: usuarioActual,
     };
 
-    resp.status(201).json(data); // aqui no deseamos crear un JWT
+    // 1) si el email es enviado correctamente entonces:
+    // A) si lo hacemos desde POSTMAN, etnocnes respondemos con un JSON
+
+    // aqui no deseamos crear un JWT
+    // B) Si lo hacemos desde paginas renderizadas , entonces RENDERIZAMOS EL "emailEnviado"
+    // B) ojo,  ya no tenemos una ruta llamada "emailEnviado"
+    respWithJwtYCookie(resp, data);
   } catch (error) {
     // userEsquema.crearPasswordResetJWT() , si sucede un error, el email no se enviara, entocnes reiniciamos estas variables,
     usuarioActual[datos.resetToken] = undefined; // el resetToken, se eliminar, porque ya no servira

@@ -62,7 +62,8 @@
 }
 
 .titulo-secundario--error {
-  background-image: linear-gradient(to right, #ff7730, #eb4d4b);
+  /* background-image: linear-gradient(to right, #ff7730, #eb4d4b); */
+  color: #ff7730;
   font-size: 3.5rem;
 }
 

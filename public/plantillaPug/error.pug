@@ -1,0 +1,22 @@
+
+//- Pug Document
+doctype html
+html
+  
+  //- aqui si hay que poner "tituloDinamico" porque varia segun cada tour (url:nombreSlugify)
+  // tituloDinamico
+  - const titulo= `App | Algo salio Mal` 
+  include _head
+
+  body
+    include ./_header
+
+    main.main--error
+      .error
+        .error--titulo
+          h2.titulo-secundario.titulo-secundario--error= tituloDinamico
+          h2.error--emoji
+        //-
+        .error--mensaje= errorMensaje
+    
+    include ./_footer
