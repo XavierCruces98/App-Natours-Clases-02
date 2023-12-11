@@ -6,8 +6,8 @@ const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 
 const {
-  respWithJwtYCookie,
-} = require('../utlidadesPropias/respWithJwtYCookie');
+  respJwtYCookie,
+} = require('../utlidadesPropias/respJwtYCookie');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 const handlerFactory = require('./handlerFactory');
 
@@ -55,7 +55,7 @@ exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   );
 
   // 💻 4.1 respuesta
-  respWithJwtYCookie(resp, {
+  respJwtYCookie(resp, {
     status: 'success updatePerfil',
     usuario: documentUpdate,
   });

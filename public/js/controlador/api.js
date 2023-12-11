@@ -17,7 +17,7 @@ export const logout = async function () {
 
     console.log(response.data);
 
-    if (response.data.status === 'success logout') {
+    if (response.data.status.startsWith('success')) {
       mostrarAlerta('success', 'Has cerrado Sesion ❗');
       window.setTimeout(() => {
         window.location.replace('/home');
@@ -41,7 +41,7 @@ export const login = async function (email, password) {
 
     console.log(response.data);
 
-    if (response.data.status === 'success POST login') {
+    if (response.data.status.startsWith('success')) {
       mostrarAlerta('success', 'Login Exitoso ❗');
       window.setTimeout(() => {
         window.location.replace('/me');
@@ -72,27 +72,48 @@ export const signup = async function (
 
     console.log(response.data);
 
-    if (response.data.status === 'Success Signup') {
+    if (response.data.status.startsWith('success')) {
       mostrarAlerta('success', 'Signup Exitoso ❗');
-      
+
+      // Aqui ya hemos creado el usuario todo Ok
+      // ahora solo falta enviarle el EMAIL
+      enviarEmail(email);
+    }
+  } catch (error) {
+    console.log(error);
+    mostrarAlerta('error', error.response.data.message);
+  }
+};
+
+export const enviarEmail = async function (email) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      // para cuando uses ---npm run start:prod---
+      // url: 'http://localhost:8000/api/v1/users/login',
+      url: 'http://localhost:3000/api/v1/users/sendEmail',
+      data: { email },
+    });
+    console.log(response.data);
+    if (response.data.status.startsWith('success')) {
       window.setTimeout(() => {
         window.location.replace('/emailEnviado');
       }, 2000); // 2 segundos
     }
   } catch (error) {
-    mostrarAlerta('error', error.response.data.message);
     console.log(error);
+    mostrarAlerta('error', error.response.data.message);
   }
 };
 
-export const passwordUpdate = async function (
+export const updatePassword = async function (
   passwordActual,
   passwordNuevo,
   passwordNuevoConfirm
 ) {
   try {
     const response = await axios({
-      method: 'POST',
+      method: 'PATCH', // ESTO ES PATCH PUES,
       // para cuando uses ---npm run start:prod---
       // url: 'http://localhost:8000/api/v1/users/login',
       url: 'http://localhost:3000/api/v1/users/updateMyPassword',
@@ -103,8 +124,13 @@ export const passwordUpdate = async function (
 
     console.log(response.data);
 
-    if (response.data.status === 'Success UpdatePassword') {
+    if (response.data.status.startsWith('success')) {
       mostrarAlerta('success', 'Password UPDATE Exitoso ❗');
+
+      window.setTimeout(() => {
+        logout(); // queremos cerrar sesion
+        //window.location.reload(true); // recargamos para salirnos de la pagina
+      }, 1000); // 1.5 segundos
     }
   } catch (error) {
     mostrarAlerta('error', error.response.data.message);

@@ -1,8 +1,8 @@
 const express = require('express');
 const controllerView = require(`../2controlador/controllerView`);
 const controllerAuth = require('../2controlador/controllerAuthentication');
+const controllerEmail = require('../utilidades/Email');
 const routerView = express.Router();
-
 
 // nota importante ❗ para que los scripts externos <script src=""> no den error
 routerView.use(controllerView.permisosHttps);
@@ -17,7 +17,7 @@ routerView.route('/login').get(
   controllerView.login
 );
 routerView.route('/me').get(
-  controllerAuth.verificarLogin, //
+  controllerAuth.validarJwtCookie, // Si se ha cambiado la CONTRASEÑA saldra ERROCLASS
   controllerView.perfil
 );
 
@@ -27,16 +27,23 @@ routerView.route('/signup').get(
   controllerView.signup
 );
 
-routerView.route('/emailEnviado').get(controllerAuth.verificarLogin, controllerView.emailEnviado);
+routerView.route('/emailEnviado').get(
+  controllerAuth.verificarLogin, //
+  controllerView.emailEnviado
+);
 
 routerView.route('/confirmarEmail/:stringRandom').get(
   controllerAuth.verificarLogin,
-  controllerAuth.verificarEmailConString, //validar email
+  controllerEmail.verificarEmailConString //validar email
 );
 
 routerView.route('/tour/:string').get(
   controllerAuth.verificarLogin, //
   controllerView.tour
 );
+
+routerView
+  .route('/updateMyPerfil-view') //
+  .post(controllerAuth.verificarLogin, controllerView.updateMyPerfilView);
 
 module.exports = routerView;

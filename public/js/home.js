@@ -6,17 +6,17 @@ const botonLogout = document.querySelector('#btn-logout');
 const mapa = document.querySelector('#mapa');
 const menuUsuario = document.querySelector('.usuario-vista');
 
-if (menuUsuario) formUpdate();
-// if (window.location.pathname.includes('confirmarEmail')) {
-//   window.setTimeout(function () {
-//     window.location.replace('/home');
-//   }, 2000); //2segundos
-// }
+if (window.location.pathname.includes('confirmarEmail')) {
+  window.setTimeout(function () {
+    window.location.replace('/home');
+  }, 2000); //2segundos
+}
 
 if (window.location.pathname === '/login') await formLogin();
 if (window.location.pathname === '/signup') await formSignup();
 if (botonLogout) await btnLogout();
-if (mapa)  crearMapaBox(mapa);
+if (mapa) crearMapaBox(mapa);
+if (menuUsuario) formUpdate();
 
 async function btnLogout() {
   botonLogout.addEventListener('click', async function (e) {
@@ -77,11 +77,15 @@ async function formSignup() {
 
 //---------------------------------------------------------------------------
 async function formUpdate() {
-  document
-    .querySelector('#cambiarNombreEmail')
-    .addEventListener('submit', function (e) {
-      e.preventDefault();
-    });
+  // document
+  //   .querySelector('#cambiarNombreEmail')
+  //   .addEventListener('submit', async function (e) {
+  //     e.preventDefault();
+  //     const nombre = document.querySelector('#nombre').value;
+  //     const email = document.querySelector('#email').value;
+  //     console.log({ email, nombre });
+  //     await api.updatePerfil(email, nombre);
+  //   });
 
   document
     .querySelector('#cambiarPassword')

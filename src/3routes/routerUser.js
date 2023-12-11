@@ -3,17 +3,25 @@ const express = require('express');
 const controlUsers = require(`../2controlador/controllerUsers`);
 const routerUser = express.Router();
 const controllerAuth = require('../2controlador/controllerAuthentication');
+const controllerEmail = require('../utilidades/Email');
 // nota Es necesario colocar en "validarJwtCookie(false)" en cada metodo, sino no lo colocas, podra hacer GET/POST/DELETE sin el JWT
 
 //----------------------- 1.0 Sin necesidad de iniciar sesion ---------------------------
 //----------------------- 1.1 Creacion e Inicio de SESION
+// Esta logica debe de estar separada
 routerUser
   .route('/signup') // aqui un usuario normal crea una cuenta. pero solo una cuenta a la vez.
-  .post(controllerAuth.signup, controllerAuth.sendEmailSignUp);
+  .post(controllerAuth.signup); // "aqui se crea un JWT y Cookie"
+
+// Aqui no importa si ha iniciado sesion o no
+// Aqui simplemente verificara en la base de datos si el usuario EXISTE ()
+routerUser
+  .route('/sendEmail') //
+  .post(controllerAuth.sendEmail);
 
 routerUser
   .route('/confirmarEmail/:stringRandom') // Usuario normal crea una cuenta. pero solo una cuenta a la vez.
-  .get(controllerAuth.verificarEmailConString);
+  .get(controllerEmail.verificarEmailConString);
 
 routerUser
   .route('/login') //
@@ -24,9 +32,6 @@ routerUser
   .get(controllerAuth.logout); // esto es GET porque no estamos enviando ningun dato
 
 //----------------------- 1.2 confirmar EMAIL o renovar PASSOWRD
-routerUser
-  .route('/envioConfirmacionEmail') //
-  .post(controllerAuth.sendEmailSignUp);
 
 routerUser
   .route('/forgotPassword') //

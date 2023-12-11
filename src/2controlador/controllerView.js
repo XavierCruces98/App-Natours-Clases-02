@@ -1,6 +1,30 @@
 const DB_tour = require('../1modelos/esquemaTour');
+const DB_user = require('../1modelos/esquemaUser');
 const AsyncFunction = require('../utilidades/AsyncFunction');
+//const filtrarObject = require('../utlidadesPropias/filtrarObject');
 
+exports.updateMyPerfilView = AsyncFunction(async function (req, resp, next) {
+  // necesitas de ___express.urlencoded({ extended: true, limit: '10kb' })__
+  // para poder ver el "req.body" enviado desde archivo.pug (action="/url")
+  // hemos puesto ---verificarLogin--- para que devuelva "usuarioLocal"
+  console.log({ body: req.body, user: resp.locals.usuarioLocal._id });
+
+  const consulta = { _id: resp.locals.usuarioLocal._id };
+  const validarDatos = { new: true, runValidators: true };
+
+  const documentUpdate = await DB_user.findOneAndUpdate(
+    consulta,
+    {
+      nombre: req.body.nombre,
+      email: req.body.email,
+    },
+    validarDatos
+  );
+
+  console.log({ usuarioLocal: documentUpdate });
+  resp.locals.usuarioLocal = documentUpdate;
+  resp.status(200).render('me');
+});
 
 //---------------------------------------------------
 exports.permisosHttps = AsyncFunction(async function (req, resp, next) {

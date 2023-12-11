@@ -79,7 +79,7 @@ const enviarDeveloper = function (err, req, resp) {
   // renderizar "error.ejs" ó "error.pug"
   return resp.status(err.statusCode).render('error', {
     tituloDinamico: `(dev) Algo salio mal 😥 ${err.status} false OPERATIONAL`, // va directo a pug
-    errorMensaje: err.message, // va directo a pug
+    errorMensaje: `${err.message} ${err.stack}`, // va directo a pug
   });
 };
 

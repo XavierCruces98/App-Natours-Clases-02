@@ -21,17 +21,10 @@ const ErrorController = require('../2controlador/controllerError'); // globalErr
 const testRoute = express.Router();
 
 const cookieParser = require('cookie-parser');
+
 apiWithExpress.use(cookieParser()); // nota ahora recien nuestro "req" tiene "req.cookies"
 // 💻  0.0 ejemplo de un middleware (debe de ir antes de cualquier route)
-apiWithExpress.use((req, resp, next) => {
-  // Esto es un ejemplo, tmb puedes ver variables & headers & req.params de la URL
-  //console.log(req.headers, req.body, req.params); // se dispara cada vez que se realiza una REQUEST a nuestra API
 
-  // console.log({cookieParser: req.cookies});
-  next();
-});
-
-//---------------------------------------------------------------------------------------------------
 // 💻 1.0 Se indica el motor del plantillas a utilizar, en este caso 'pug'
 // apiWithExpress.set('view engine', 'html'); // esto  no se puede :( por eso usamos 'pug'
 apiWithExpress.set('view engine', 'pug'); // para pug
@@ -47,14 +40,18 @@ apiWithExpress.use(express.static(path.join(DIRNAME, 'public')));
 
 // 💻 4.0 AQUI estamos enrutando, pero aun asi te peudes ir cualquier sitio,
 // 💻 4.0 se supone que solo deberias tener acceso a las rutas establecidas por NODE.JS
+// 💻1.0 seguridad de los HEADERS HTTP
+apiWithExpress.use(helmet());
 
-//---------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
 
 // 001 GLOBAL MIDDLEWARE -- recuerda que el orden de tu codigo SI importa, el orden que coloques estos middleware es importante
 // por ello el control error va al final , de la misma forma el ".all()"
-
-// 💻1.0 seguridad de los HEADERS HTTP
-apiWithExpress.use(helmet());
+apiWithExpress.use((req, resp, next) => {
+  // Puedes ver variables & headers & req.params de la URL
+  //console.log(req.headers, req.body, req.params); // se dispara cada vez que se realiza una REQUEST a nuestra API
+  next();
+});
 
 // 💻2.0 Login development, Usar MORGAN si es DEVELOPMENT
 if (process.env.NODE_ENV === 'development') {
@@ -77,6 +74,9 @@ apiWithExpress.use('/api', limiter);
 // 💻3.0 Limitar el tamaño en kb que se puede enviar por "body-postman"
 //apiWithExpress.use(express.json()); // esto es un ""middleware"" , podemos colocar un body desde el POSTMAN
 apiWithExpress.use(express.json({ imite: '10kb' })); // si el body-postman tiene más de 10kb lo rechazara
+
+// 💻3.1 muestras las solicitudes enviadas desde archivos.pug archivo.html ---action="/url"---
+apiWithExpress.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // 💻3.1 DATA-SANITIZATION NOSQL no permitir el ingreso de "consultas NoSQL"
 apiWithExpress.use(mongoSanitize());

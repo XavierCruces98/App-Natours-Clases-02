@@ -123,7 +123,7 @@ exports.toursCercanos = AsyncFunction(async function (req, resp, next) {
   const documentFind = await DB_tour.find(consulta);
 
   resp.status(200).json({
-    status: 'success ToursCercanos',
+    status: 'success toursCercanos',
     documents: documentFind.length,
     data: {
       documentFind,
@@ -174,7 +174,7 @@ exports.tourDistancias = AsyncFunction(async function (req, resp, next) {
   const documentFind = await DB_tour.aggregate(consulta);
 
   resp.status(200).json({
-    status: 'success ToursDistancia',
+    status: 'success toursDistancia',
     data: {
       documentFind,
     },

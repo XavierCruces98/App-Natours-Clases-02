@@ -30,6 +30,7 @@ const crearJwtYCookie = function (resp, usuario) {
 
   if (process.env.NODE_ENV === 'production') opciones.secure = true;
 
+  console.log({ tokenJWT});
   // 1.0 Aqui creamos la cookie
   resp.cookie(nombre, tokenJWT, opciones);
 
@@ -44,7 +45,7 @@ const crearJwtYCookie = function (resp, usuario) {
   return tokenJWT;
 };
 
-exports.respWithJwtYCookie = function (resp, datos) {
+exports.respJwtYCookie = function (resp, datos) {
   //resp.status(201).json({ ...datos, ...data });
   const tokenJWT = crearJwtYCookie(resp, datos.usuario);
   resp.status(201).json({ ...datos, tokenJWT });

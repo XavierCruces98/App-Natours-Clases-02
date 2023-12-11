@@ -40,25 +40,44 @@ html(lang="en")
           .usuario-vista--formulario-contenido
             h2.titulo-secundario.quick-facts Opciones
 
-            //- WITHOUT API
-            //- form(action="/submit-user-typeusuadata", method="POST")
+            //- WITH API / Con logica JS / SII necesitas usar un "axios ó fetch()" 
+            //- form#cambiarNombreEmail
+            //-   .formulario--grupo
+            //-     label.formulario--label(for="nombre") Nombre
+            //-     input#nombre.formulario--input(type="text", minlength="1", maxlength="40",required, min=8,name="nombre")
 
-            //- WITH API
-            form(action="")#cambiarNombreEmail
+            //-   .formulario--grupo.quick-facts
+            //-     label.formulario--label(for="email") Email
+            //-     input#email.formulario--input(type="text", value=`${usuarioLocal.email}`, required, name="email")
+
+            //-   .formulario--grupo.formulario--foto-upload
+            //-     img.formulario--usuario-foto(src=`/imagenes/usuarios/${usuarioLocal.photo}`, alt=`foto de ${usuarioLocal.nombre}`)
+            //-     a.boton-texto(href="") Escoge una foto
+
+            //-   .formulario--grupo.derecho
+            //-     button.boton.boton--pequeno.boton--verde(type="submit") Guardar cambios
+
+            //- WITHOUT API / sin logica JS / no necesitas usar un "axios ó fetch()" 
+            //- Aqui ya no necesitamos logica JS
+            //- Aqui lo importante es (for="") eso sera como nuestro body.postaman
+            //- Debes de poner "method=POST" porque estas enviando datos, 
+            //- Si lo correcto seria poner "method=PATCH" pero no funciona
+            //- nota ambas formas son validas
+            form(action="/updateMyPerfil-view" method='POST')#cambiarNombreEmail
               .formulario--grupo
                 label.formulario--label(for="nombre") Nombre
-                input#nombre.formulario--input(type="text", required, name="nombre")
+                input.formulario--input(type="text", minlength="1", maxlength="40",required, min=8,name="nombre")
 
               .formulario--grupo.quick-facts
                 label.formulario--label(for="email") Email
-                input#email.formulario--input(type="text", value=`${usuarioLocal.email}`, required, name="email")
+                input.formulario--input(type="text", value=`${usuarioLocal.email}`, required, name="email")
 
               .formulario--grupo.formulario--foto-upload
                 img.formulario--usuario-foto(src=`/imagenes/usuarios/${usuarioLocal.photo}`, alt=`foto de ${usuarioLocal.nombre}`)
                 a.boton-texto(href="") Escoge una foto
 
               .formulario--grupo.derecho
-                button.boton.boton--pequeno.boton--verde Guardar cambios
+                button.boton.boton--pequeno.boton--verde(type="submit") Guardar cambios
 
           .linea &nbsp;
 
@@ -68,17 +87,17 @@ html(lang="en")
             form(action="")#cambiarPassword
               .formulario--grupo
                 label.formulario--label(for="password-actual") Actual password
-                input#password-actual.formulario--input(type="password", placeholder="Ingresar su password actual", required)
+                input#password-actual.formulario--input(type="password",minlength="8", placeholder="Ingresar su password actual", required)
 
               .formulario--grupo
                 label.formulario--label(for="password-nuevo") Nuevo Password
-                input#password-nuevo.formulario--input(type="password", placeholder="Ingresar su password nuevo", required)
+                input#password-nuevo.formulario--input(type="password",minlength="8", placeholder="Ingresar su password nuevo", required)
 
               .formulario--grupo.quick-facts
                 label.formulario--label(for="password-confirm") Confirmar Password Nuevo
-                input#password-confirm.formulario--input(type="password", placeholder="Confirmar su password nuevo", required)
+                input#password-confirm.formulario--input(type="password",minlength="8", placeholder="Confirmar su password nuevo", required)
 
               .formulario--grupo.derecho
-                button.boton.boton--pequeno.boton--verde Guardar Password
+                button.boton.boton--pequeno.boton--verde(type="submit") Guardar Password
 
     include ./_footer.pug

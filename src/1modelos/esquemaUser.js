@@ -126,7 +126,7 @@ const userEsquema = new mongoose.Schema(
   },
   {
     toJSON: { virtuals: false }, // con true saldra en la visualizacion dos veces el ID
-    toObject: { virtuals:false },
+    toObject: { virtuals: false },
   }
 );
 
@@ -137,7 +137,12 @@ const userEsquema = new mongoose.Schema(
 // 🟢🟢 video 105. Document Middleware, recuerda, solo funciona con .save() y .create(), NO con .createMany()
 // 🟢🟢 video127, guardar "password" de forma encriptada ===> "bcrypt" con async/await
 // nota tener password visibles , sin encriptar, en nuestra base de datos es PELIGROSO,
- 
+
+userEsquema.pre('save', async function (next) {
+  this.photo = this.photo || 'usuario-generico.jpg';
+  next();
+});
+
 //------------------------------------- 🔴 COMENTAR PARA IMPORTAR DATOS 🔴 -----------------------------------------------------------
 // 💻 1.0 Transformado el PASSWORD a ENCRIPTADO (bcrypt) , antes de guardarlo en la base-de-datos
 
@@ -173,7 +178,11 @@ userEsquema.pre('save', async function (next) {
   // Le estamos restando 1s, porque se puede demorar en ejecutar esta funcion
   // Y parecera como que el "this.passwordChange" fue cambiado despues de la creacion del JWT
   // leer -- userEsquema.methods.validarCambioContrasena ---
-  this.passwordChange = localTime(-1 * 1000);
+  // this.passwordChange = localTime(-1 * 1000);
+
+  //nota el "passwordChange" debe de aparecer que se cambio despues del "JWT" +1segundo
+  // esto obligara a iniciar sesion de nuevo
+  this.passwordChange = localTime(1 * 1000);
   next();
 });
 
@@ -214,19 +223,19 @@ userEsquema.methods.validarCambioContrasena = function (timeCreadoJWT) {
 
   // 1.0 Si no existe un cambioDePassword, entonces return false
   if (!this.passwordChange) return false;
-
-  const fechaJWT = new Date(timeCreadoJWT * 1000); // return DATE
+  const offset = new Date().getTimezoneOffset() * 1 * 60 * 1000;
+  const fechaJWT = new Date(timeCreadoJWT * 1000 - offset); // return DATE
   const fechaChange = this.passwordChange; // Date
 
-  console.log({ JWT_creado: fechaJWT, Password_Change: fechaChange });
+  //console.log({ JWT_creado: fechaJWT, Password_Change: fechaChange });
 
   // fecha1 JWT_creado      = 2023/12/31
   // fecha2 passwordChange = 2024/01/01
   // NUNCA el "passwordChange" tendra una fecha menor a "JWT_creado"
   // si el "passwordChange" tiene un fecha menor al "JWT_creado" RETURN FALSE
 
-  // si fechaJWT < fechaChange return TRUE    === significa que el "password" SII fue cambio
-  // si fechaJWT < fechaChange return FAlSE   === significa que el "password" NOO fue cambiado
+  // si fechaJWT < fechaChange return TRUE  === significa que el "password" SII fue cambio
+  // si fechaJWT < fechaChange return FAlSE === significa que el "password" NOO fue cambiado
   // .getTime() => return (milisegundos)
   return fechaJWT.getTime() < fechaChange.getTime();
 };
