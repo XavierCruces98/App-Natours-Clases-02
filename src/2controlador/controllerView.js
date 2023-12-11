@@ -30,6 +30,8 @@ exports.updateMyPerfilView = AsyncFunction(async function (req, resp, next) {
 exports.permisosHttps = AsyncFunction(async function (req, resp, next) {
   // Aqui vas añadiendo URLS
   // https://*.mapbox.com https://cdn.jsdelivr.net hhtps://ejemplo.ejemplo.com
+  // https://*.mapbox.com  (para MAPA gps de nuestros tours)
+  // https://cdn.jsdelivr.net (para AXIOS y hacer solicitudes HTTP a nuestra API desde JS)
   resp.setHeader(
     'Content-Security-Policy',
     "default-src 'self' https://*.mapbox.com https://cdn.jsdelivr.net ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://*.mapbox.com https://cdn.jsdelivr.net 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;"

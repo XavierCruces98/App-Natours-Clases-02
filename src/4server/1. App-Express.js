@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-//const pug = require('pug');
+const cookieParser = require('cookie-parser');
 
 const apiWithExpress = express(); // es como new http()
 const DIRNAME = require('../DIRNAME');
@@ -20,7 +20,6 @@ const ErrorClass = require('../utilidades/ErrorClass');
 const ErrorController = require('../2controlador/controllerError'); // globalErrorHandler
 const testRoute = express.Router();
 
-const cookieParser = require('cookie-parser');
 
 apiWithExpress.use(cookieParser()); // nota ahora recien nuestro "req" tiene "req.cookies"
 // 💻  0.0 ejemplo de un middleware (debe de ir antes de cualquier route)
@@ -32,8 +31,7 @@ apiWithExpress.set('view engine', 'pug'); // para pug
 // apiWithExpress.set('view engine', 'ejs');
 
 // 💻 2.0 Se indica el directorio donde se almacenarán las plantillas PUG (set)
-//apiWithExpress.set('views', path.join(DIRNAME, 'public/pugPlantillas'));
-apiWithExpress.set('views', path.join(DIRNAME, 'public/plantillaPug'));
+apiWithExpress.set('views', path.join(DIRNAME, 'public/plantillaPug')); // plantijasEjs
 
 // 💻 3.0 Se indica el directorio donde se almacenarán nuestra informacion(css,js,etc)(express.static + USE)
 apiWithExpress.use(express.static(path.join(DIRNAME, 'public')));
@@ -85,8 +83,8 @@ apiWithExpress.use(mongoSanitize());
 apiWithExpress.use(xss());
 
 // 💻3.3 PREVENT PARAMETER POLLUTION,
-// hpp()          === evita el duplicado de parametros                                      ❌''duracion=3 & duracion=9 & duracion=5''
-// hpp(whitelist) === especificamos parametros especificos que si se les permita su duplicado ✅''duracion=3 & duracion=9 & duracion=5''
+// hpp()          === evita el duplicado de parametros            ❌''duracion=3 & duracion=9 & duracion=5''
+// hpp(whitelist) === especificamos parametros especificos que SI se les permite su duplicado ✅''duracion=3 & duracion=9 & duracion=5''
 // whitelist      ===  estos parametros ingresados en URL no sera afectados por el hpp()
 apiWithExpress.use(
   hpp({

@@ -12,5 +12,14 @@ head
   link(rel="shortcut icon", type="image/png", href="/imagenes/favicon.png")
   //-  script(type="commonjs", defer, src="./../js/home.js") // permite el "require()" pero no el IMPORT
   //-  script(type="module", defer, src="./../js/home.js") // permite el "IMPORT" pero no el require()
-  script(type="module" defer src="./../js/home.js")   
+  link(rel="shortcut icon", type="image/png", href="/imagenes/favicon.png")
+  //- sin "parcel" no necesitamos este script, lo __import axios from "https://cdn.jsdelivr.net"__
+  //- Con "parcel" si necesitamos este script, y ya NO  __import axios from "https://cdn.jsdelivr.net"__
+  script(src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js") 
+
+
+  //-script(type="module" defer src="./../js/home.js")   SIN parcel necesitamos nuestro HOME.js, index.js etc
+  //-script(type="module" defer src="./../js/bundle.js") CON parcel necesitamos bundle.js
+  script(type="module" defer src="./../js/bundle.js")
+
   title #{titulo}

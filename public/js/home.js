@@ -1,6 +1,12 @@
-// const api = require('./controlador/api.js');
+
+// para crear el archivo ---bundle.js y bundle.js.map--- basta con escribir ___npm run watch:js___
+// asegurate de tener 02 terminales abiertas a la vez "npm run start:dev" y "npm run watch:js"
 import * as api from './controlador/api.js';
 import { crearMapaBox } from './crearMapaBox.js';
+import '@babel/polyfill'; // esto es un paso opcional, si quitas esto funciona igual,
+// con esto incluido sale una alerta de " Content Security Policy  "default-src 'self' https://*.mapbox.com https://cdn.jsdelivr.net".", pero todo funciona ok
+
+
 
 const botonLogout = document.querySelector('#btn-logout');
 const mapa = document.querySelector('#mapa');
@@ -12,9 +18,9 @@ if (window.location.pathname.includes('confirmarEmail')) {
   }, 2000); //2segundos
 }
 
-if (window.location.pathname === '/login') await formLogin();
-if (window.location.pathname === '/signup') await formSignup();
-if (botonLogout) await btnLogout();
+if (window.location.pathname === '/login') formLogin();
+if (window.location.pathname === '/signup') formSignup();
+if (botonLogout) btnLogout();
 if (mapa) crearMapaBox(mapa);
 if (menuUsuario) formUpdate();
 

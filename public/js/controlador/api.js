@@ -1,6 +1,11 @@
 //const axios = require('axios'); // esto no se puede
 // debes de hacer funcionar SI o SI a axios, sino, te dara error
-import axios from 'https://cdn.jsdelivr.net/npm/axios@1.3.5/+esm';
+//import axios from 'https://cdn.jsdelivr.net/npm/axios@1.3.5/+esm';
+
+// sin PARCEL : __import axios from 'https://cdn.jsdelivr.net/npm/axios@1.3.5/+esm';__
+// con PARCEL : _head.pug ===> script(href='https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js')
+
+
 import { mostrarAlerta } from './alerta.js';
 
 export const logout = async function () {

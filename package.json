@@ -10,16 +10,18 @@
     "start:dev": "set NODE_ENV=development&&npx nodemon \"src/4server/2. App-run-server.js\"",
     "importData": "node \"src/1modelos/importar-data-json.js\" --importarDatos",
     "deleteData": "node \"src/1modelos/importar-data-json.js\" --eliminarDatos",
-    "debug": "ndb \"src/4server/1. App-Exress.js\""
+    "debug": "ndb \"src/4server/1. App-Exress.js\"",
+    "watch:js": "parcel watch ./public/js/home.js --out-dir ./public/js --out-file bundle.js",
+    "build:js": "parcel watch ./public/js/home.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
     "axios": "^1.6.2",
     "bcryptjs": "2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-mongo-sanitize": "2.2.0",
     "express-rate-limit": "7.1.3",
@@ -37,6 +39,7 @@
     "xss-clean": "0.1.4"
   },
   "devDependencies": {
-    "ndb": "1.1.5"
+    "ndb": "1.1.5",
+    "parcel-bundler": "1.12.5"
   }
 }
