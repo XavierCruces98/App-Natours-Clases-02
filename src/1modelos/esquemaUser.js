@@ -43,6 +43,7 @@ const userEsquema = new mongoose.Schema(
       type: String,
       //required: [true, 'Necesitas ingresar un USER-photo'],
       trim: true, // si escribes  " hola  que ", se guarda como "hola que", corta los espacios innecesarios
+      default: 'usuario-generico.jpg', // nombre de la foto
     },
 
     password: {
@@ -138,10 +139,11 @@ const userEsquema = new mongoose.Schema(
 // 🟢🟢 video127, guardar "password" de forma encriptada ===> "bcrypt" con async/await
 // nota tener password visibles , sin encriptar, en nuestra base de datos es PELIGROSO,
 
-userEsquema.pre('save', async function (next) {
-  this.photo = this.photo || 'usuario-generico.jpg';
-  next();
-});
+// si funciona, pero es mejor ponerlo como DEFAULT
+// userEsquema.pre('save', async function (next) {
+//   this.photo = this.photo || 'usuario-generico.jpg';
+//   next();
+// });
 
 //------------------------------------- 🔴 COMENTAR PARA IMPORTAR DATOS 🔴 -----------------------------------------------------------
 // 💻 1.0 Transformado el PASSWORD a ENCRIPTADO (bcrypt) , antes de guardarlo en la base-de-datos

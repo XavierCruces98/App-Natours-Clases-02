@@ -1,15 +1,49 @@
 // node "src/proyect1/controlador/controlUsers.js"
 // npm run start:dev
 const DB_user = require('../1modelos/esquemaUser');
-const multer = require('multer');
-const uploadPhoto = multer({ dest: 'public/imagenes/usuarios' });
-
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 
 const { respJwtYCookie } = require('../utlidadesPropias/respJwtYCookie');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 const handlerFactory = require('./handlerFactory');
+
+//---------------------
+const multer = require('multer');
+
+const multerStorage = multer.diskStorage({
+  // 1.0 destino
+  destination: function (req, archivo, callback) {
+    return callback(null, 'public/imagenes/usuarios');
+  },
+  // 2.0 nombre archivo
+  // (recuerda que pare acceder a "/updateMyPerfil" deben iniciar sesion)
+  filename: function (req, archivo, callback) {
+    // user-ID-fecha.jpg
+    const extension = archivo.mimetype.split('/')[1]; // ".jpeg"
+    return callback(
+      null,
+      `user-${req.usuarioActual.id}-${Date.now()}.${extension}`
+    );
+  },
+});
+
+const multerFiltro = function (req, archivo, callback) {
+  if (archivo.mimetype.startsWith('image')) {
+    callback(null, true);
+  } else {
+    callback(
+      new ErrorClass('No es una Imagen!, Elige un archivo de Imagen!'),
+      false
+    );
+  }
+};
+
+//const uploadPhoto = multer({ dest: 'public/imagenes/usuarios' });
+const uploadPhoto = multer({
+  storage: multerStorage,
+  fileFilter: multerFiltro,
+});
 
 exports.multerUploadPhoto = uploadPhoto.single('photo');
 
@@ -36,7 +70,8 @@ exports.getMe = AsyncFunction(async function (req, resp, next) {
 
 exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   // subirFoto con MULTER
-  console.log({ archivo: req.file, body: req.body });
+  // console.log({ archivo: req.file, body: req.body });
+  // console.log({ usuarioActual: req.usuarioActual });
 
   // 💻 1.0 En este URL '/updateMyPerfil' no se permite actualizar password, solo "nombre+email"
   if (req.body.password || req.body.passwordConfirm)
@@ -45,17 +80,21 @@ exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   // 💻 2.0 buscando usuario, y obviamente si esta porque ha iniciado sesion "permisoJWT"
 
   const consulta = { _id: req.usuarioActual.id };
+  const body = filtrarObject(req.body, 'email', 'nombre');
+
   const validarDatos = { new: true, runValidators: true };
 
-  // 💻 3.0 no podemos hacer esto,
-  // porque --await DB_user.save()-- hara que se activen los campos obligatorio y "password + confirm" es un campo obligatorio
+  // 💻 3.0 no podemos hacer --await DB_user.save()--
+  // porque que se activen los campos obligatorio y "password + confirm" es un campo obligatorio
   // validarUsuario.nombre = req.body.nombre;
   // validarUsuario.email = req.body.email;
   // await DB_user.save(); // req.body.password + req.body.passwordConfirm;
-  // 💻 3.0 actualizando usuario
+
+  // 💻 3.0 actualizando usuario y foto
+  body.photo = req.file?.filename || req.usuarioActual.photo;
   const documentUpdate = await DB_user.findOneAndUpdate(
     consulta,
-    filtrarObject(req.body, 'email', 'nombre'),
+    body,
     validarDatos
   );
 

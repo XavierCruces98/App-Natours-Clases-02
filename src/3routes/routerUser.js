@@ -42,11 +42,8 @@ routerUser
   .patch(controllerAuth.resetPassword);
 
 //--------------------------------------------------------------
-
+// nota 2.0  Inicio de sesion OBLIGATORIO, todos los --middleware-- de abajo tendran como primer --middleware-- a [controllerAuth.validarJwtCookie]
 routerUser.use(controllerAuth.validarJwtCookie);
-// 2.0 Inicio de sesion OBLIGATORIO
-// 2.1 todos los --middleware-- de abajo tendran como primer --middleware-- a [controllerAuth.validarJwtCookie(false)]
-// 2.2 [controllerAuth.validarJwtCookie(false)] verifica el JWT del LOGIN
 
 routerUser.route('/me').get(
   controllerUsers.getMe,
