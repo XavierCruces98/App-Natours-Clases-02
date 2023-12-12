@@ -25,8 +25,12 @@ Instalar:
 🔴 (necesario) npm install cookie-parse --save-dev  -E    (para analizar todas las cookies)
 🔴 (necesario) npm install parcel-bundler --save-dev -E   (para construir el bundle.js)
 🟢 (opcional) npm install @babel/polyfill  -E             (es una ayuda para bundle.js)
-🔴 (necesario) npm install multer  -E (para cargar fotos?)
+🔴 (necesario) npm install multer  -E (para cargar SUBIR fotos)
 
+
+//https://github.com/lovell/sharp/issues/3086
+// instala una version especifica y todo funcionara bien con sharp
+🔴 (necesario) npm install sharp@0.29.3 -E   (para redimensionar las FOTOS) 
 
 🟢 opcional: npm start ("node reiniciarArchivos.js") reinicia archivos
 
