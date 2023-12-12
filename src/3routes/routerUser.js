@@ -58,7 +58,7 @@ routerUser
   .route('/updateMyPerfil') //
   .patch(
     controllerUser.multerUploadPhoto, //
-    controllerUser.resizingPhoto,
+    controllerUser.resizeUserImagen,
     controllerUser.updatePerfil
   );
 

@@ -35,7 +35,7 @@ const multer = require('multer');
 const multerStorage = multer.memoryStorage();
 
 const multerFiltro = function (req, archivo, callback) {
-  console.log(`holaaa`);
+  console.log(`MULTER USER FILTRO ACTUANDO`);
   if (archivo.mimetype.startsWith('image')) {
     callback(null, true);
   } else {
@@ -57,7 +57,7 @@ exports.multerUploadPhoto = uploadPhoto.single('photo');
 
 //----------------------------------------------------------------------
 
-exports.resizingPhoto = AsyncFunction(async function (req, resp, next) {
+exports.resizeUserImagen = AsyncFunction(async function (req, resp, next) {
   // Si ---multerUploadPhoto--- se realiza con éxito, entonces, existe "req.file"
   console.log({ archivoPre: req });
   if (!req.file) return next();

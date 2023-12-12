@@ -106,6 +106,8 @@ routerTour
   .patch(
     controllerAuth.validarJwtCookie,
     controllerAuth.restringidoTo('admin', 'lider-guia', 'guia'), // los users-bascios, no puede modificar un tour
+    controlTours.updatePhotoTours,
+    controlTours.resizeTourImagen,
     controlTours.patchTourId
   )
   .delete(

@@ -4,6 +4,77 @@ const Consultas = require('./Consultas');
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const handlerFactory = require('./handlerFactory');
 const ErrorClass = require('../utilidades/ErrorClass');
+const sharp = require('sharp'); // npm install sharp@0.29.3 -E
+
+//---------------------
+const multer = require('multer');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFiltro = function (req, archivo, callback) {
+  console.log(`MULTER TOUR FILTRO ACTUANDO`);
+  if (archivo.mimetype.startsWith('image')) {
+    callback(null, true);
+  } else {
+    callback(
+      new ErrorClass('No es una Imagen!, Elige un archivo de Imagen!'),
+      false
+    );
+  }
+};
+
+//const uploadPhoto = multer({ dest: 'public/imagenes/usuarios' });
+const uploadPhoto = multer({
+  storage: multerStorage,
+  fileFilter: multerFiltro,
+});
+
+// la propiedad "photo" debe ser enviada en el formulario
+exports.updatePhotoTours = uploadPhoto.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'imagenes', maxCount: 3 },
+]);
+
+exports.resizeTourImagen = AsyncFunction(async function (req, resp, next) {
+  // uploadPhoto.single('photo')  ==>  req.file
+  // uploadPhoto.fields([])       ==>  req.files
+
+  console.log({ archivo: req.files });
+  if (!req.files) return next();
+
+  // 1) IMAGECOVER === creando nombre del archivo ---imageCover---
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+
+  await sharp(req.files.imageCover[0].buffer) // el archivo esta en "BUFFER"
+    .resize(2000, 1333) //imagenes de 500px 500px (ancho, altura)
+    .toFormat('jpeg') // convertir imagen a '.jpeg'
+    .jpeg({ quality: 90 }) // calidad de la imagen al 90%
+    .toFile(`public/imagenes/tours/${req.body.imageCover}`); // guardando imagen en DISCO
+
+  // 2) IMAGENES === creando nombre de cada archivo de ---imagenes---
+  req.body.imagenes = []; // creamos un array y luego .push("nombreImagen.jpg")
+ 
+  await Promise.all(
+    req.files.imagenes.map(async function (elemento, index) {
+      const nombreArchivo = `tour-${req.params.id}-${Date.now()}-${
+        index + 1
+      }.jpeg`;
+
+      await sharp(elemento.buffer) // el archivo esta en "BUFFER"
+        .resize(2000, 1333) //imagenes de 500px 500px (ancho, altura)
+        .toFormat('jpeg') // convertir imagen a '.jpeg'
+        .jpeg({ quality: 90 }) // calidad de la imagen al 90%
+        .toFile(`public/imagenes/tours/${nombreArchivo}`); // guardando imagen en DISCO
+
+      req.body.imagenes.push(nombreArchivo);
+    })
+  );
+
+  // el "handlerFactory.patchElementoId(DB_tour);" mete todo lo que este en --req.body--
+  next();
+});
+
+//------------------------------------------------
 
 exports.getAgrupamientoAno = AsyncFunction(async function (req, resp, next) {
   const miYear = +req.params.miAno; //revisar ""routerTour"" '/plan-mensual/:miAno'
