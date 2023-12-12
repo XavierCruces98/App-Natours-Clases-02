@@ -23,6 +23,9 @@ Instalar:
 🔴 (necesario) npm install pug --save-dev  -E             (para renderizar plantilla de PUG)
 🔴 (necesario) npm install ejs --save-dev  -E             (para renderizar plantilla de EJS)
 🔴 (necesario) npm install cookie-parse --save-dev  -E    (para analizar todas las cookies)
+🔴 (necesario) npm install parcel-bundler --save-dev -E   (para construir el bundle.js)
+🟢 (opcional) npm install @babel/polyfill  -E             (es una ayuda para bundle.js)
+🔴 (necesario) npm install multer  -E (para cargar fotos?)
 
 
 🟢 opcional: npm start ("node reiniciarArchivos.js") reinicia archivos

@@ -1,6 +1,6 @@
 // node "src/proyect1/routes/routerUserUser.js"
 const express = require('express');
-const controlUsers = require(`../2controlador/controllerUsers`);
+const controllerUsers = require(`../2controlador/controllerUsers`);
 const routerUser = express.Router();
 const controllerAuth = require('../2controlador/controllerAuthentication');
 const controllerEmail = require('../utilidades/Email');
@@ -49,8 +49,8 @@ routerUser.use(controllerAuth.validarJwtCookie);
 // 2.2 [controllerAuth.validarJwtCookie(false)] verifica el JWT del LOGIN
 
 routerUser.route('/me').get(
-  controlUsers.getMe,
-  controlUsers.getUserId // ver mi perfil
+  controllerUsers.getMe,
+  controllerUsers.getUserId // ver mi perfil
 );
 
 routerUser
@@ -59,11 +59,14 @@ routerUser
 
 routerUser
   .route('/updateMyPerfil') //
-  .patch(controlUsers.updatePerfil);
+  .patch(
+    controllerUsers.multerUploadPhoto, //
+    controllerUsers.updatePerfil
+  );
 
 routerUser
   .route('/deleteMyPerfil') //
-  .patch(controlUsers.deletePerfil);
+  .patch(controllerUsers.deletePerfil);
 
 //----------------------------------------
 
@@ -72,14 +75,14 @@ routerUser.use(controllerAuth.restringidoTo('admin'));
 
 routerUser
   .route('/:id')
-  .get(controlUsers.getUserId)
-  .patch(controlUsers.patchUserId)
-  .delete(controlUsers.deleteUserId);
+  .get(controllerUsers.getUserId)
+  .patch(controllerUsers.patchUserId)
+  .delete(controllerUsers.deleteUserId);
 
 routerUser
   .route('/')
-  .get(controlUsers.consultaAllDocuments)
-  .post(controlUsers.postUser)
-  .delete(controlUsers.deleteMany);
+  .get(controllerUsers.consultaAllDocuments)
+  .post(controllerUsers.postUser)
+  .delete(controllerUsers.deleteMany);
 //
 module.exports = routerUser;

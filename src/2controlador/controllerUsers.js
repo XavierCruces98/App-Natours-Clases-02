@@ -1,15 +1,17 @@
 // node "src/proyect1/controlador/controlUsers.js"
 // npm run start:dev
 const DB_user = require('../1modelos/esquemaUser');
+const multer = require('multer');
+const uploadPhoto = multer({ dest: 'public/imagenes/usuarios' });
 
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 
-const {
-  respJwtYCookie,
-} = require('../utlidadesPropias/respJwtYCookie');
+const { respJwtYCookie } = require('../utlidadesPropias/respJwtYCookie');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 const handlerFactory = require('./handlerFactory');
+
+exports.multerUploadPhoto = uploadPhoto.single('photo');
 
 exports.consultaAllDocuments = handlerFactory.getAllElements(DB_user);
 
@@ -33,6 +35,9 @@ exports.getMe = AsyncFunction(async function (req, resp, next) {
 });
 
 exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
+  // subirFoto con MULTER
+  console.log({ archivo: req.file, body: req.body });
+
   // 💻 1.0 En este URL '/updateMyPerfil' no se permite actualizar password, solo "nombre+email"
   if (req.body.password || req.body.passwordConfirm)
     return next(new ErrorClass("Porfavor use la ruta '/updatePassword'", 401)); // bad request
