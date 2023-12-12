@@ -5,7 +5,6 @@
 // sin PARCEL : __import axios from 'https://cdn.jsdelivr.net/npm/axios@1.3.5/+esm';__
 // con PARCEL : _head.pug ===> script(href='https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js')
 
-
 import { mostrarAlerta } from './alerta.js';
 
 export const logout = async function () {
@@ -136,6 +135,38 @@ export const updatePassword = async function (
         logout(); // queremos cerrar sesion
         //window.location.reload(true); // recargamos para salirnos de la pagina
       }, 1000); // 1.5 segundos
+    }
+  } catch (error) {
+    mostrarAlerta('error', error.response.data.message);
+    console.log(error);
+  }
+};
+
+export const updatePerfil = async function (formulario) {
+  // para investigar:  https://www.javascripture.com/FormData
+  // https://stackoverflow.com/questions/43013858/how-to-post-a-file-from-a-form-with-axios
+  // https://axios-http.com/docs/multipart
+  // Para enviar un archivo, "axios", configura automaticamente y hace altgo trasbambinas
+  // headers: {"Content-Type": "multipart/form-data"}
+  console.log({ formulario });
+
+  try {
+    const response = await axios({
+      method: 'PATCH', // ESTO ES PATCH PUES,
+      // para cuando uses ---npm run start:prod--- 'http://localhost:8000/api/v1/users/login',
+      url: 'http://localhost:3000/api/v1/users/updateMyPerfil',
+      // si le cambias el nombre de estas variables dara ERROR
+      data: formulario,
+    });
+
+    console.log(response.data);
+
+    if (response.data.status.startsWith('success')) {
+      mostrarAlerta('success', 'Perfil UPDATE  exitoso ❗');
+
+      window.setTimeout(() => {
+        window.location.reload(true); // recargamos la pagina
+      }, 1000); // 1.0 segundos
     }
   } catch (error) {
     mostrarAlerta('error', error.response.data.message);

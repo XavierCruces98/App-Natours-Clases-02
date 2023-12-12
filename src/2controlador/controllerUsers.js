@@ -35,6 +35,7 @@ const multer = require('multer');
 const multerStorage = multer.memoryStorage();
 
 const multerFiltro = function (req, archivo, callback) {
+  console.log(`holaaa`);
   if (archivo.mimetype.startsWith('image')) {
     callback(null, true);
   } else {
@@ -51,14 +52,15 @@ const uploadPhoto = multer({
   fileFilter: multerFiltro,
 });
 
+// la propiedad "photo" debe ser enviada en el formulario
 exports.multerUploadPhoto = uploadPhoto.single('photo');
 
 //----------------------------------------------------------------------
 
 exports.resizingPhoto = AsyncFunction(async function (req, resp, next) {
   // Si ---multerUploadPhoto--- se realiza con éxito, entonces, existe "req.file"
+  console.log({ archivoPre: req });
   if (!req.file) return next();
-  console.log({ archivoPre: req.file });
 
   // aqui estamos creando la propiedad ".filename" // "el .jpeg solo es texto"
   req.file.filename = `user-${req.usuarioActual.id}-${Date.now()}.jpeg`;
@@ -95,7 +97,7 @@ exports.getMe = AsyncFunction(async function (req, resp, next) {
 
 exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   // subirFoto con MULTER
-  // console.log({ archivo: req.file, body: req.body });
+  console.log({ archivo: req.file, body: req.body });
   // console.log({ usuarioActual: req.usuarioActual });
 
   // 💻 1.0 En este URL '/updateMyPerfil' no se permite actualizar password, solo "nombre+email"
@@ -106,7 +108,6 @@ exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
 
   const consulta = { _id: req.usuarioActual.id };
   const body = filtrarObject(req.body, 'email', 'nombre');
-
   const validarDatos = { new: true, runValidators: true };
 
   // 💻 3.0 no podemos hacer --await DB_user.save()--
@@ -124,7 +125,14 @@ exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
     validarDatos
   );
 
-  // 💻 4.1 respuesta
+  resp.locals.usuarioLocal = documentUpdate;
+
+  // 💻 4.1 respuesta si estamos en "renderizar"
+  // 💻 4.2 acuerdate que no podemos renderizar, porque estamos en ruta "user"
+  // 💻 4.3 y solo podemos renderizar en ruta "view"
+  // if (!req.url.startsWith('/api')) return resp.status(200).render('me');
+
+  // 💻 4.1  si estamos en "/api"
   respJwtYCookie(resp, {
     status: 'success updatePerfil',
     usuario: documentUpdate,

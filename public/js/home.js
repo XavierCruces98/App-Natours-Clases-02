@@ -1,12 +1,9 @@
-
 // para crear el archivo ---bundle.js y bundle.js.map--- basta con escribir ___npm run watch:js___
 // asegurate de tener 02 terminales abiertas a la vez "npm run start:dev" y "npm run watch:js"
 import * as api from './controlador/api.js';
 import { crearMapaBox } from './crearMapaBox.js';
 import '@babel/polyfill'; // esto es un paso opcional, si quitas esto funciona igual,
 // con esto incluido sale una alerta de " Content Security Policy  "default-src 'self' https://*.mapbox.com https://cdn.jsdelivr.net".", pero todo funciona ok
-
-
 
 const botonLogout = document.querySelector('#btn-logout');
 const mapa = document.querySelector('#mapa');
@@ -82,17 +79,36 @@ async function formSignup() {
 }
 
 //---------------------------------------------------------------------------
-async function formUpdate() {
-  // document
-  //   .querySelector('#cambiarNombreEmail')
-  //   .addEventListener('submit', async function (e) {
-  //     e.preventDefault();
-  //     const nombre = document.querySelector('#nombre').value;
-  //     const email = document.querySelector('#email').value;
-  //     console.log({ email, nombre });
-  //     await api.updatePerfil(email, nombre);
-  //   });
 
+async function formUpdate() {
+  //-------- PREVISUALIZAR ------------------------------------
+  // recuerda: input id="photo"
+  document.querySelector('#photo').addEventListener('change', function (e) {
+    e.preventDefault();
+    const archivo = e.target.files[0];
+    const leer = new FileReader();
+    leer.onload = function (archivo) {
+      const src = archivo.target.result;
+      document.querySelector('#previsualizar-photo').setAttribute('src', src);
+    };
+    leer.readAsDataURL(archivo);
+  });
+  //------------------------------------------------
+
+  //----------- 1.0 Formulario NOMBRE+EMAIL+PHOTO -------------------------
+  document
+    .querySelector('#cambiarNombreEmail')
+    .addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formulario = new FormData();
+      formulario.append('nombre', document.querySelector('#nombre').value);
+      formulario.append('email', document.querySelector('#email').value);
+      formulario.append('photo', document.querySelector('#photo').files[0]); //esta propiedad debe ser llamada "photo"
+
+      await api.updatePerfil(formulario);
+    });
+
+  //----------- 2.0 Formulario CAMBIAR PASSWORD -------------------------
   document
     .querySelector('#cambiarPassword')
     .addEventListener('submit', async function (e) {

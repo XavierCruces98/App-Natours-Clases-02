@@ -320,6 +320,8 @@ exports.verificarLogin = AsyncFunction(async function (req, resp, next) {
     // 4) si SI existe "usuarioLocal" los botones seran (logout & "perfil") y "/me" no dara error
     // 4) si NO existe "usuarioLocal" los botones seran (login & signup) y "/me" dara error
 
+    console.log(`CONTROLLER COOKIE`);
+    req.usuarioActual = usuario; // requerimiento
     resp.locals.usuarioLocal = usuario; // respuesta
 
     return next();

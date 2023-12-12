@@ -1,6 +1,6 @@
 // node "src/proyect1/routes/routerUserUser.js"
 const express = require('express');
-const controllerUsers = require(`../2controlador/controllerUsers`);
+const controllerUser = require(`../2controlador/controllerUsers`);
 const routerUser = express.Router();
 const controllerAuth = require('../2controlador/controllerAuthentication');
 const controllerEmail = require('../utilidades/Email');
@@ -46,8 +46,8 @@ routerUser
 routerUser.use(controllerAuth.validarJwtCookie);
 
 routerUser.route('/me').get(
-  controllerUsers.getMe,
-  controllerUsers.getUserId // ver mi perfil
+  controllerUser.getMe,
+  controllerUser.getUserId // ver mi perfil
 );
 
 routerUser
@@ -57,14 +57,14 @@ routerUser
 routerUser
   .route('/updateMyPerfil') //
   .patch(
-    controllerUsers.multerUploadPhoto, //
-    controllerUsers.resizingPhoto,
-    controllerUsers.updatePerfil
+    controllerUser.multerUploadPhoto, //
+    controllerUser.resizingPhoto,
+    controllerUser.updatePerfil
   );
 
 routerUser
   .route('/deleteMyPerfil') //
-  .patch(controllerUsers.deletePerfil);
+  .patch(controllerUser.deletePerfil);
 
 //----------------------------------------
 
@@ -73,14 +73,14 @@ routerUser.use(controllerAuth.restringidoTo('admin'));
 
 routerUser
   .route('/:id')
-  .get(controllerUsers.getUserId)
-  .patch(controllerUsers.patchUserId)
-  .delete(controllerUsers.deleteUserId);
+  .get(controllerUser.getUserId)
+  .patch(controllerUser.patchUserId)
+  .delete(controllerUser.deleteUserId);
 
 routerUser
   .route('/')
-  .get(controllerUsers.consultaAllDocuments)
-  .post(controllerUsers.postUser)
-  .delete(controllerUsers.deleteMany);
+  .get(controllerUser.consultaAllDocuments)
+  .post(controllerUser.postUser)
+  .delete(controllerUser.deleteMany);
 //
 module.exports = routerUser;
