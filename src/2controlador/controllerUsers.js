@@ -59,7 +59,7 @@ exports.multerUploadPhoto = uploadPhoto.single('photo');
 
 exports.resizeUserImagen = AsyncFunction(async function (req, resp, next) {
   // Si ---multerUploadPhoto--- se realiza con éxito, entonces, existe "req.file"
-  console.log({ archivoPre: req });
+  // console.log({ archivoPre: req });
   if (!req.file) return next();
 
   // aqui estamos creando la propiedad ".filename" // "el .jpeg solo es texto"
@@ -97,8 +97,7 @@ exports.getMe = AsyncFunction(async function (req, resp, next) {
 
 exports.updatePerfil = AsyncFunction(async function (req, resp, next) {
   // subirFoto con MULTER
-  console.log({ archivo: req.file, body: req.body });
-  // console.log({ usuarioActual: req.usuarioActual });
+  // console.log({ archivo: req.file, body: req.body });
 
   // 💻 1.0 En este URL '/updateMyPerfil' no se permite actualizar password, solo "nombre+email"
   if (req.body.password || req.body.passwordConfirm)

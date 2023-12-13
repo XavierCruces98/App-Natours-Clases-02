@@ -9,7 +9,6 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 
 const apiWithExpress = express(); // es como new http()
-const DIRNAME = require('../DIRNAME');
 
 const userRoute = require('../3routes/routerUser');
 const tourRoute = require('../3routes/routerTour');
@@ -31,10 +30,10 @@ apiWithExpress.set('view engine', 'pug'); // para pug
 // apiWithExpress.set('view engine', 'ejs');
 
 // 💻 2.0 Se indica el directorio donde se almacenarán las plantillas PUG (set)
-apiWithExpress.set('views', path.join(DIRNAME, 'public/plantillaPug')); // plantijasEjs
+apiWithExpress.set('views', path.join(`${__dirname}/../../`, 'public/plantillaPug')); // plantijasEjs
 
 // 💻 3.0 Se indica el directorio donde se almacenarán nuestra informacion(css,js,etc)(express.static + USE)
-apiWithExpress.use(express.static(path.join(DIRNAME, 'public')));
+apiWithExpress.use(express.static(path.join(`${__dirname}/../../`, 'public')));
 
 // 💻 4.0 AQUI estamos enrutando, pero aun asi te peudes ir cualquier sitio,
 // 💻 4.0 se supone que solo deberias tener acceso a las rutas establecidas por NODE.JS

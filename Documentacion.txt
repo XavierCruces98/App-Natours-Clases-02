@@ -26,11 +26,11 @@ Instalar:
 🔴 (necesario) npm install parcel-bundler --save-dev -E   (para construir el bundle.js)
 🟢 (opcional) npm install @babel/polyfill  -E             (es una ayuda para bundle.js)
 🔴 (necesario) npm install multer  -E (para cargar SUBIR fotos)
-
-
 //https://github.com/lovell/sharp/issues/3086
 // instala una version especifica y todo funcionara bien con sharp
 🔴 (necesario) npm install sharp@0.29.3 -E   (para redimensionar las FOTOS) 
+🔴 (necesario) npm install html-to-text -E   (convertir codigo HTML => String) 
+
 
 🟢 opcional: npm start ("node reiniciarArchivos.js") reinicia archivos
 

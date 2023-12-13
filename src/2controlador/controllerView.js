@@ -43,7 +43,6 @@ exports.permisosHttps = AsyncFunction(async function (req, resp, next) {
 exports.allTours = AsyncFunction(async function (req, resp, next) {
   const data = await DB_tour.find();
   const dataTours = data.slice(0, data.length - 1);
-  console.log({data: data});
 
   resp.status(200).render('allTours', {
     dataTours: dataTours,

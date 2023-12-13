@@ -1,0 +1,19 @@
+extends _baseEmail
+
+block extenderContenedor
+  //- variableLocal "primerNombre" --Class Email---
+  p Hola #{primerNombre},
+  p Bienvenido a --Natours--, estamos contentos de tenerte 🎉🙏
+  p Porfavor confirma tu Email en el siguiente enlace:
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  //- variableLocal "URL" --Class Email---
+                  a(href=`${url}`, target='_blank') Confirmar tu Email! Solo tienes 10min!
+  p Si necesita ayuda para reservar su próximo tour, ¡no dude en ponerse en contacto conmigo!
+  p - Xavier Huaman, CEO

@@ -6,8 +6,6 @@ const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
 const localTime = require('../utlidadesPropias/localTime');
 const { respJwtYCookie } = require('../utlidadesPropias/respJwtYCookie');
-const { sendEmail } = require('../utilidades/Email');
-
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 
 exports.signup = AsyncFunction(async function (req, resp, next) {
@@ -104,30 +102,6 @@ exports.restringidoTo = function (...roles) {
   };
 };
 
-exports.sendEmail = AsyncFunction(async function (req, resp, next) {
-  req.datos = {
-    email: req.body.email,
-    resetToken: 'emailResetToken',
-    resetTime: 'emailTimeReset',
-    subject: 'Recuperar tu Contraseña NODEJS (valido 10min)',
-    text: `Porfavor confirma tu EMAIL con el siguiente URL. `,
-  };
-
-  await sendEmail(req, resp, next);
-});
-
-//🔵🔵005 Password olvidado, Ingresar EMAL + enviar un correo con STRING RANDOM
-exports.forgotPassword = AsyncFunction(async function (req, resp, next) {
-  req.datos = {
-    email: req.body.email,
-    resetToken: 'passwordResetToken',
-    resetTime: 'passwordTimeReset',
-    subject: 'Recuperar tu Contraseña NODEJS (valido 10min)',
-    text: `Olvidastes tu password? SUBMIT un PATCH request con tu nuevo password and password al siguiente URL de abajo. Si no has olvidado tu contraseña, ignora este email.`,
-  };
-
-  await sendEmail(req, resp, next);
-});
 
 //🔵🔵006 Validar StringRANDOM + Colocar una nueva contrseña
 exports.resetPassword = AsyncFunction(async function (req, resp, next) {

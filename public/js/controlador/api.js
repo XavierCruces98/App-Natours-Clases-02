@@ -95,14 +95,15 @@ export const enviarEmail = async function (email) {
       method: 'POST',
       // para cuando uses ---npm run start:prod---
       // url: 'http://localhost:8000/api/v1/users/login',
-      url: 'http://localhost:3000/api/v1/users/sendEmail',
+      url: 'http://localhost:3000/api/v1/users//emailWelcome',
       data: { email },
     });
     console.log(response.data);
     if (response.data.status.startsWith('success')) {
-      window.setTimeout(() => {
-        window.location.replace('/emailEnviado');
-      }, 2000); // 2 segundos
+      console.log("TODO OK HASTA AQUI");
+      // window.setTimeout(() => {
+      //   window.location.replace('/emailEnviado');
+      // }, 2000); // 2 segundos
     }
   } catch (error) {
     console.log(error);

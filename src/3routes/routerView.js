@@ -2,7 +2,7 @@ const express = require('express');
 const controllerView = require(`../2controlador/controllerView`);
 const controllerAuth = require('../2controlador/controllerAuthentication');
 const controllerUser = require('../2controlador/controllerUsers');
-const controllerEmail = require('../utilidades/Email');
+const controllerEmail = require('../2controlador/controllerEmail');
 
 const routerView = express.Router();
 
@@ -36,7 +36,7 @@ routerView.route('/emailEnviado').get(
 
 routerView.route('/confirmarEmail/:stringRandom').get(
   controllerAuth.verificarLogin,
-  controllerEmail.verificarEmailConString //validar email
+  controllerEmail.verificarEmailString //validar email
 );
 
 routerView.route('/tour/:string').get(

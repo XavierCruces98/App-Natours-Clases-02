@@ -6060,7 +6060,7 @@ var enviarEmail = exports.enviarEmail = /*#__PURE__*/function () {
             method: 'POST',
             // para cuando uses ---npm run start:prod---
             // url: 'http://localhost:8000/api/v1/users/login',
-            url: 'http://localhost:3000/api/v1/users/sendEmail',
+            url: 'http://localhost:3000/api/v1/users//emailWelcome',
             data: {
               email: email
             }
@@ -6069,9 +6069,10 @@ var enviarEmail = exports.enviarEmail = /*#__PURE__*/function () {
           response = _context4.sent;
           console.log(response.data);
           if (response.data.status.startsWith('success')) {
-            window.setTimeout(function () {
-              window.location.replace('/emailEnviado');
-            }, 2000); // 2 segundos
+            console.log("TODO OK HASTA AQUI");
+            // window.setTimeout(() => {
+            //   window.location.replace('/emailEnviado');
+            // }, 2000); // 2 segundos
           }
           _context4.next = 12;
           break;
@@ -7450,7 +7451,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49605" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55790" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

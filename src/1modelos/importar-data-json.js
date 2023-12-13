@@ -2,16 +2,13 @@
 // npm run importData
 // npm run deleteData
 
-const filySystem = require('fs');
+const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 const DB_user = require('./esquemaUser');
 const DB_tour = require('./esquemaTour'); // aqui es donde obtenemos el collection ""collections-mis-tours""
 const DB_review = require('./esquemaReview');
-
-const DIRNAME = require('../DIRNAME');
-
 // los numeros se transforman en letras
 
 // Step01: Variables de Entorno haremos esto solo para "development" simplemente porque asi deseo
@@ -30,13 +27,13 @@ mongoose
 
 // Step 03 nota Read File -- aqui indicas el nombre del archivo
 const userObjectJSON = JSON.parse(
-  filySystem.readFileSync(`${DIRNAME}/dev_data/datos/users.json`)
+  fs.readFileSync(`${__dirname}/../../dev_data/datos/users.json`)
 );
 const tourObjectJSON = JSON.parse(
-  filySystem.readFileSync(`${DIRNAME}/dev_data/datos/toursComplejos.json`)
+  fs.readFileSync(`${__dirname}/../../dev_data/datos/toursComplejos.json`)
 );
 const reviewObjectJSON = JSON.parse(
-  filySystem.readFileSync(`${DIRNAME}/dev_data/datos/reviews.json`)
+  fs.readFileSync(`${__dirname}/../../dev_data/datos/reviews.json`)
 );
 
 // Step04 importando Data a collection ó eliminar Data a collection
@@ -59,7 +56,6 @@ const importarDatos = async function () {
   }
   process.exit(); // para salir de la app
 };
-
 
 const eliminarDatos = async function () {
   try {
