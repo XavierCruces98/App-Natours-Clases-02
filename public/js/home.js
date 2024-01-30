@@ -8,6 +8,8 @@ import '@babel/polyfill'; // esto es un paso opcional, si quitas esto funciona i
 const botonLogout = document.querySelector('#btn-logout');
 const mapa = document.querySelector('#mapa');
 const menuUsuario = document.querySelector('.usuario-vista');
+const passwordOlvidado = document.querySelector('#passwordOlvidado');
+const resetPassword = document.querySelector('#resetPassword');
 
 if (window.location.pathname.includes('confirmarEmail')) {
   window.setTimeout(function () {
@@ -20,6 +22,30 @@ if (window.location.pathname === '/signup') formSignup();
 if (botonLogout) btnLogout();
 if (mapa) crearMapaBox(mapa);
 if (menuUsuario) formUpdate();
+if (passwordOlvidado) formPasswordOlvidado();
+if (resetPassword) formResetPassword();
+
+async function formPasswordOlvidado() {
+  passwordOlvidado.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const email = document.querySelector('#email').value;
+    console.log({ email });
+    await api.emailForgotPassword(email);
+  });
+}
+
+async function formResetPassword() {
+  resetPassword.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    // nuestra prueba sera cambiar la contra de "test1234" ==> "test54321"
+    const password = document.querySelector('#password').value;
+    const passwordConfirm = document.querySelector('#password-confirm').value;
+    const string = window.location.pathname.replace('/recuperar-cuenta/', '');
+
+    await api.recuperarCuenta(password, passwordConfirm, string);
+  });
+}
 
 async function btnLogout() {
   botonLogout.addEventListener('click', async function (e) {

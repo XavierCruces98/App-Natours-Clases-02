@@ -5,7 +5,54 @@
 // sin PARCEL : __import axios from 'https://cdn.jsdelivr.net/npm/axios@1.3.5/+esm';__
 // con PARCEL : _head.pug ===> script(href='https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js')
 
+// nota acuerdate tener tener el ---npm run build:js--- activado
 import { mostrarAlerta } from './alerta.js';
+
+export const emailForgotPassword = async function (email) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: 'http://localhost:3000/api/v1/users/forgotPassword',
+      data: { email },
+    });
+
+    console.log(response.data);
+
+    if (response.data.status.startsWith('success')) {
+      mostrarAlerta('success', 'Correo Enviado❗ Verifica tu Email');
+    }
+  } catch (error) {
+    mostrarAlerta('error', error.response.data.message);
+    console.log(error);
+  }
+};
+
+export const recuperarCuenta = async function (
+  password,
+  passwordConfirm,
+  string
+) {
+  try {
+    const response = await axios({
+      method: 'PATCH',
+      url: `http://localhost:3000/api/v1/users/resetPassword/${string}`,
+      data: { password, passwordConfirm },
+    });
+
+    console.log(response.data);
+
+    if (response.data.status.startsWith('success')) {
+      mostrarAlerta('success', 'Password Restablecido');
+      
+      window.setTimeout(() => {
+        window.location.replace('/home');
+      }, 2000); // 1.0 segundos
+    }
+  } catch (error) {
+    mostrarAlerta('error', error.response.data.message);
+    console.log(error);
+  }
+};
 
 export const logout = async function () {
   try {
@@ -95,15 +142,15 @@ export const enviarEmail = async function (email) {
       method: 'POST',
       // para cuando uses ---npm run start:prod---
       // url: 'http://localhost:8000/api/v1/users/login',
-      url: 'http://localhost:3000/api/v1/users//emailWelcome',
+      url: 'http://localhost:3000/api/v1/users/emailWelcome',
       data: { email },
     });
     console.log(response.data);
     if (response.data.status.startsWith('success')) {
-      console.log("TODO OK HASTA AQUI");
-      // window.setTimeout(() => {
-      //   window.location.replace('/emailEnviado');
-      // }, 2000); // 2 segundos
+      console.log('TODO OK HASTA AQUI');
+      window.setTimeout(() => {
+        window.location.replace('/emailEnviado');
+      }, 2000); // 2 segundos
     }
   } catch (error) {
     console.log(error);

@@ -1,11 +1,13 @@
 .error {
-  position: absolute;
+  /* position: absolute;
   top: 60%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  max-width: 80rem;
-  text-align: center;
+  left: 50%; */
+  /* -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
+  /* max-width: 80rem; */
+
+  margin-top: 3rem;
+  /* text-align: center; */
 
 }
 .error--titulo {
@@ -25,8 +27,8 @@
   margin-left: 1rem;
 }
 .error--mensaje{
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  max-width: 50rem;
-  margin: 0 auto;
+  /* max-width: 50rem; */
+  /* margin: 0 auto; */
 }

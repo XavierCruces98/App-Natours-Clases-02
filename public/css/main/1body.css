@@ -49,7 +49,7 @@ body {
 
 .main--error {
   background-color: #f7f7f7;
-  padding: 10rem;
+  padding: 1rem;
 
   flex: 1;
   position: relative;

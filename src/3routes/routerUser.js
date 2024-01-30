@@ -3,6 +3,7 @@ const express = require('express');
 const controllerUser = require(`../2controlador/controllerUsers`);
 const routerUser = express.Router();
 const controllerAuth = require('../2controlador/controllerAuthentication');
+const controllerAuthString = require('../2controlador/controllerAuthString');
 const controllerEmail = require('../2controlador/controllerEmail');
 // nota Es necesario colocar en "validarJwtCookie(false)" en cada metodo, sino no lo colocas, podra hacer GET/POST/DELETE sin el JWT
 
@@ -21,7 +22,7 @@ routerUser
 
 routerUser
   .route('/confirmarEmail/:stringRandom') // Usuario normal crea una cuenta. pero solo una cuenta a la vez.
-  .get(controllerEmail.verificarEmailString);
+  .get(controllerAuthString.verificarStringEmail);
 
 routerUser
   .route('/login') //
@@ -39,7 +40,7 @@ routerUser
 
 routerUser
   .route('/resetPassword/:stringRandom') //
-  .patch(controllerAuth.resetPassword);
+  .patch(controllerAuthString.resetPassword);
 
 //--------------------------------------------------------------
 // nota 2.0  Inicio de sesion OBLIGATORIO, todos los --middleware-- de abajo tendran como primer --middleware-- a [controllerAuth.validarJwtCookie]

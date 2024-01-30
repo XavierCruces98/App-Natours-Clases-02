@@ -1,10 +1,8 @@
 const DB_user = require('../1modelos/esquemaUser');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 
 const AsyncFunction = require('../utilidades/AsyncFunction');
 const ErrorClass = require('../utilidades/ErrorClass');
-const localTime = require('../utlidadesPropias/localTime');
 const { respJwtYCookie } = require('../utlidadesPropias/respJwtYCookie');
 const filtrarObject = require('../utlidadesPropias/filtrarObject');
 
@@ -102,55 +100,6 @@ exports.restringidoTo = function (...roles) {
   };
 };
 
-
-//🔵🔵006 Validar StringRANDOM + Colocar una nueva contrseña
-exports.resetPassword = AsyncFunction(async function (req, resp, next) {
-  // nota, aqui usamos "patch" , porque vamos a modificar nuestra contraseña + estamos usando un ID
-  // en "forgotPassword" usamos "post" porque simplemente estamos ingresando nuestro emal
-
-  // 💻 1.0 creando un Token
-  const randomToken = crypto
-    .createHash('sha256')
-    .update(req.params.stringRandom) // revisar "routerUser"
-    .digest('hex');
-  const vlocalTime = localTime();
-
-  // 💻 2.0 Validando Token + Time Expiracion  // gte>= mayorigual, lte <= menor igual
-  const validarUsuario = await DB_user.findOne({
-    // 01 un solo usuario deberia tener este token unico generado, sino lo tiene, es un token invalido
-    passwordResetToken: randomToken,
-    // 02 timeReset>= now() TRUE, timeReset<=now() FALSE (se vencio los 10min)
-    passwordTimeReset: { $gte: vlocalTime },
-  });
-
-  if (!validarUsuario) {
-    return next(new ErrorClass('El token es invalido ó El token expiro', 400));
-  }
-
-  // 💻 3.0 SAVE "password", y reiniciando las propiedades "passwordResetToken + passwordTimeReset"
-  // 💻 3.0 La encriptacion-password, sucede antes de que se guarde el --nuevoUsuario-- en la data-base ---.pre("save")---
-  // 💻 3.0 ❗❗❗ OJO deberiamos tener alguna logica para que el usuario no ingrese su contraseña anterior ❗❗❗
-  const timeReset = validarUsuario.passwordTimeReset;
-  validarUsuario.password = req.body.password;
-  validarUsuario.passwordConfirm = req.body.passwordConfirm;
-  validarUsuario.passwordResetToken = undefined;
-  validarUsuario.passwordTimeReset = undefined;
-  await validarUsuario.save();
-
-  // 💻 4.0 obligatorio crear un nuevo JWT
-  // 💻 4.0 "validarJWT", es innecesario, aqui simplemente quiero obtener el "iat"
-  const data = {
-    status: 'success resetPassword',
-    usuario: validarUsuario,
-    passwordTimeReset: timeReset,
-    horaActual: vlocalTime,
-    passwordChange: validarUsuario.passwordChange,
-    nuevoPassword: validarUsuario.password,
-  };
-
-  respJwtYCookie(resp, data);
-});
-
 exports.updatePassword = AsyncFunction(async function (req, resp, next) {
   // 💻 1.0 El usuario ya tiene su seccion iniciada E ingreso a "configuraciones" para cambiar su contraseña,
   // 💻 1.0 Buscando el usuario que tiene su seccion inicada para comparar password, "+password"
@@ -227,7 +176,6 @@ exports.validarJwtCookie = AsyncFunction(async function (req, resp, next) {
 
   // 💻 4.0 revisar si el usuario a cambiado de contraseña despues que JWT fue enviado
   // 💻 4.0 TRUE= contraseña SI Cambiada, FALSE= contraseña NO cambiada
-
   const contrasenaCambiada = validarUsuario.validarCambioContrasena(
     validarJWT.iat
   );
@@ -269,10 +217,13 @@ exports.verificarLogin = AsyncFunction(async function (req, resp, next) {
 
     if (!usuario) return next();
 
-    // 3) Si se ha cambiado de contraseña return TRUE
-    if (usuario.validarCambioContrasena(token.iat)) {
-      return next();
-    }
+    // 3) este paso es innecesario, solamente sirve para cuando el usuario ha cambiado su contraseña
+    // 3) y queremos que todavia inicie seision de nuevo, a pesar de haber actualizado su contraseña
+    // if (usuario.validarCambioContrasena(token.iat)) {
+    //   // si la contraseña ha sido cambiada entonces simplemente iniciamos sesion
+    //   resp.locals.usuarioLocal = usuario; // respuesta
+    //   return next();
+    // }
 
     // 4) si no se ha confirmado "email" damos next() y "resp.locals.usuarioLocal NO existira"
     if (usuario.emailConfirm === false) {
@@ -289,14 +240,22 @@ exports.verificarLogin = AsyncFunction(async function (req, resp, next) {
       return next();
     }
 
-    // 4) Si todo esta okay ponemos "usuarioLocal===usuario"
-    // 4) si hay algun error arriba simplemente damos en --next()-- y "usuarioLocal no existira"
-    // 4) si SI existe "usuarioLocal" los botones seran (logout & "perfil") y "/me" no dara error
-    // 4) si NO existe "usuarioLocal" los botones seran (login & signup) y "/me" dara error
+    // 5) Si todo esta okay ponemos "usuarioLocal===usuario"
+    // 5) si hay algun error arriba simplemente damos en --next()-- y "usuarioLocal no existira"
+    // 5) si SI existe "usuarioLocal" los botones seran (logout & "perfil") y "/me" no dara error
+    // 5) si NO existe "usuarioLocal" los botones seran (login & signup) y "/me" dara error
 
     console.log(`CONTROLLER COOKIE`);
     req.usuarioActual = usuario; // requerimiento
     resp.locals.usuarioLocal = usuario; // respuesta
+
+    // 6) Si estamos en /olvidastes-tu-password ó /recuperar-cuenta
+    // 6) y ya tenemos iniciada la sesion, entonces provocamos un error
+    if (
+      req.url.includes('olvidastes-tu-password') ||
+      req.url.includes('recuperar-cuenta')
+    )
+      return next(new ErrorClass('Ya has iniciado sesion!', 401));
 
     return next();
   } catch (error) {
